@@ -1,0 +1,39 @@
+name: guitar_eik
+description: A new Flutter project.
+
+publish_to: none
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  faker: ^2.1.0
+  cupertino_icons: ^1.0.8
+  flutter_bloc: ^8.1.6
+  shared_preferences: ^2.5.5
+  flutter_chord: ^0.1.2
+  flutter_guitar_tabs: ^0.0.10
+  google_fonts: ^8.0.2
+  lottie: ^3.1.0
+  dio: ^5.9.2
+  flutter_skeleton_ui: ^0.0.6
+  flutter_native_splash: ^2.4.0
+
+flutter_native_splash:
+  color: "#F54927"
+  android_12:
+    color: "#F54927"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  change_app_package_name: ^1.1.0
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
