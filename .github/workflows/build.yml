@@ -1,0 +1,12 @@
+name: Flutter Build
+on: 
+  workflow_dispatch:
+  push:
+    branches: [name]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing Workflow
+        run: echo "Is Work"
