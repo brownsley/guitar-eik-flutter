@@ -11,7 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+<<<<<<< Updated upstream
 
+=======
+  rxdart: ^0.28.0
+  flutter_dotenv: ^5.1.0
+>>>>>>> Stashed changes
   faker: ^2.1.0
   cupertino_icons: ^1.0.8
   flutter_bloc: ^8.1.6

@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/card/artist_card.dart';
 import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArtistPage extends StatefulWidget {
   const ArtistPage({super.key});
@@ -49,6 +49,14 @@ class _ArtistPageState extends State<ArtistPage> {
             fontSize: 14,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/search");
+            },
+            icon: Icon(Icons.search),
+          ),
+        ],
       ),
       body: BlocBuilder<ArtistCubit, ArtistState>(
         builder: (context, state) {
