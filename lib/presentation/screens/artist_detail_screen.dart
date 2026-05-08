@@ -1,7 +1,7 @@
-import 'package:guitar_eik/logic/artist/detail/artist_detail_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guitar_eik/logic/artist/detail/artist_detail_cubit.dart';
+import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
 
 class ArtistDetailScreen extends StatefulWidget {
   const ArtistDetailScreen({super.key});
@@ -29,24 +29,89 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
         if (state is ArtistDetailLoading) {
           return LoadingView();
         }
-        // if (state is ArtistDetailLoaded) {
-        //   return Text("Success");
-        // }
+
         if (state is ArtistDetailLoaded) {
           final artist = state.artistDetail;
           return Scaffold(
             appBar: AppBar(title: Text(artist.name)),
             body: Column(
               children: [
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(artist.avatar),
-                  ),
-                  title: Text(
-                    artist.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text("${artist.totalTrack} Songs available"),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // 1. Avatar with Border Radius
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        artist.avatar,
+                        width: 150,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(width: 16), // Space between image and text
+                    // 2. Artist Details
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            artist.name,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "${artist.totalTrack} Songs",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          // 3. YouTube Button (Minimalist version)
+                          InkWell(
+                            onTap: () {
+                              // YouTube link logic
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.red.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.red,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "YouTube",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const Divider(),
                 Expanded(

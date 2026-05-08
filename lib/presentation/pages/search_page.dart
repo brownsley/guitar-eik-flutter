@@ -76,7 +76,6 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     }
-
                     return ListView(
                       children: [
                         if (state.artists.isNotEmpty) ...[
