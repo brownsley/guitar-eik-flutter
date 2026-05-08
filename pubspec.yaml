@@ -20,7 +20,7 @@ dependencies:
   flutter_chord: ^0.1.2
   flutter_guitar_tabs: ^0.0.10
   google_fonts: ^8.0.2
-  lottie: ^3.1.0
+  lottie: ^3.3.3
   dio: ^5.9.2
   flutter_skeleton_ui: ^0.0.6
   flutter_native_splash: ^2.4.0
@@ -38,3 +38,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env

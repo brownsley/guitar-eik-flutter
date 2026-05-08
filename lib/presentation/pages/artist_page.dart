@@ -46,7 +46,7 @@ class _ArtistPageState extends State<ArtistPage> {
           style: TextStyle(
             fontWeight: FontWeight.w900,
             letterSpacing: 2,
-            fontSize: 14,
+            fontSize: 16,
           ),
         ),
         actions: [
@@ -54,7 +54,7 @@ class _ArtistPageState extends State<ArtistPage> {
             onPressed: () {
               Navigator.pushNamed(context, "/search");
             },
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search, size: 28),
           ),
         ],
       ),

@@ -27,9 +27,9 @@ class SongCard extends StatelessWidget {
         : '$views';
 
     return Padding(
-      padding: const EdgeInsets.only(right: 16),
+      padding: const EdgeInsets.only(right: 8),
       child: Container(
-        width: 160,
+        width: 250,
         decoration: BoxDecoration(
           color: cardBg,
           borderRadius: BorderRadius.circular(12),

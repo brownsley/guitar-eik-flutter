@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/song_list.dart';
 import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SongPage extends StatefulWidget {
   const SongPage({super.key});
@@ -26,13 +26,22 @@ class _SongPageState extends State<SongPage> {
           "SONGS",
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            fontSize: 14,
+            fontSize: 16,
             letterSpacing: 2,
           ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/search");
+            },
+            icon: Icon(Icons.search, size: 28),
+          ),
+        ],
       ),
+
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () {

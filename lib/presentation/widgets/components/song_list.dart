@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:guitar_eik/model/song_model.dart';
 import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
-import 'package:flutter/material.dart';
 
 class SongList extends StatelessWidget {
   final List<Song> songs;
@@ -14,6 +14,7 @@ class SongList extends StatelessWidget {
 
     return ListView.builder(
       itemCount: songs.length,
+      shrinkWrap: true,
       padding: const EdgeInsets.only(top: 10, bottom: 20),
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
