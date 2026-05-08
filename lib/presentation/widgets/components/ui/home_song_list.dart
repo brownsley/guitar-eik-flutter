@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
 import 'package:guitar_eik/logic/theme/theme_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/card/song_card.dart';
 import 'package:guitar_eik/presentation/widgets/components/skeleton/songs_loading.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeSongList extends StatelessWidget {
   const HomeSongList({super.key});
@@ -28,14 +28,16 @@ class HomeSongList extends StatelessWidget {
           }
 
           return SizedBox(
-            height: 140,
+            height: 120,
+
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: songs.length,
               itemBuilder: (context, index) {
                 final song = songs[index];
+
                 return SongCard(
                   title: song.title,
                   artist: (song.artists!.isEmpty)

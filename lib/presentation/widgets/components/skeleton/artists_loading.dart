@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skeleton_ui/flutter_skeleton_ui.dart';
 
-class ListLoading extends StatelessWidget {
-  const ListLoading({super.key});
+class ArtistListLoading extends StatelessWidget {
+  const ArtistListLoading({super.key});
 
   @override
   Widget build(BuildContext context) {

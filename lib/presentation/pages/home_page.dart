@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/artist_card.dart';
+import 'package:guitar_eik/presentation/widgets/components/list/artists_list.dart';
 import 'package:guitar_eik/presentation/widgets/components/skeleton/artists_loading.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/banner_ads.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/home_hero_ads.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/home_song_list.dart';
-import 'package:guitar_eik/presentation/widgets/components/ui/song_header.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guitar_eik/presentation/widgets/components/ui/section_header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
             color: isDark ? Colors.white : Colors.black,
             fontWeight: FontWeight.w900,
             letterSpacing: 2,
-            fontSize: 14,
+            fontSize: 16,
           ),
         ),
       ),
@@ -58,38 +58,13 @@ class _HomePageState extends State<HomePage> {
               child: BlocBuilder<ArtistCubit, ArtistState>(
                 builder: (context, state) {
                   if (state is ArtistLoading) {
-                    return const Center(child: ListLoading());
+                    return const Center(child: ArtistListLoading());
                   }
                   if (state is ArtistLoaded) {
-                    final artists = state.artists;
-
-                    return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: artists.length,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      itemBuilder: (context, index) {
-                        final artist = artists[index];
-                        return SizedBox(
-                          width: 180,
-                          child: ArtistCard(
-                            artistName: artist.name,
-                            imageUrl: artist.avatar,
-                            totalSongs: artist.totalTrack!,
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                "/artist",
-                                arguments: artist.id,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    );
+                    if (state.artists.isEmpty) {
+                      return Text("No Artist Found");
+                    }
+                    return ArtistHorizontalList(artists: state.artists);
                   }
 
                   if (state is ArtistError) {
@@ -118,16 +93,18 @@ class _HomePageState extends State<HomePage> {
             const HomeSongList(),
             SectionHeader(title: "Global Hits", isDark: isDark),
             const HomeSongList(),
+
             BannerAds(
-              title: "Go Premium. Be Happy.",
-              subtitle: "Enjoy ad-free music and high-quality audio.",
+              title: "Special Limited Offer",
+              subtitle: "Get 15% Discount This Month",
               imageUrl:
-                  "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=1000&q=80",
-              onTap: () => print("Premium Ad Tapped"),
+                  "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80",
+              onTap: () {
+                print("Redeeming 15% Discount...");
+              },
             ),
             SectionHeader(title: "Recently Played", isDark: isDark),
             const HomeSongList(),
-
             const SizedBox(height: 32),
           ],
         ),

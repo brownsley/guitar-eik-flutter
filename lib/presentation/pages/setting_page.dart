@@ -1,6 +1,6 @@
-import 'package:guitar_eik/logic/theme/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guitar_eik/logic/theme/theme_cubit.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -18,7 +18,7 @@ class SettingPage extends StatelessWidget {
           "SETTINGS",
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            fontSize: 14,
+            fontSize: 16,
             letterSpacing: 2,
           ),
         ),

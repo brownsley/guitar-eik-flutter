@@ -1,6 +1,6 @@
+import 'package:bloc/bloc.dart';
 import 'package:guitar_eik/model/song_model.dart';
 import 'package:guitar_eik/service/song_service.dart';
-import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'song_state.dart';
