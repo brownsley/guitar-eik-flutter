@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:guitar_eik/model/artist_model.dart';
+import 'package:guitar_eik/model/song_model.dart';
 import 'package:guitar_eik/service/artist_service.dart';
+import 'package:guitar_eik/service/song_service.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -9,6 +11,7 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ArtistService artistService = ArtistService();
+  SongService songService = SongService();
   SearchBloc() : super(SearchInitial()) {
     on<OnQueryChanged>(
       _onSearch,
@@ -29,8 +32,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
     emit(SearchLoading());
     try {
-      final results = await artistService.querySearch(event.query);
-      emit(SearchSuccess(results));
+      final artists = await artistService.querySearch(event.query);
+      final songs = await songService.searchSong(event.query);
+      emit(SearchSuccess(artists, songs));
     } catch (e) {
       emit(SearchError(e.toString()));
     }
