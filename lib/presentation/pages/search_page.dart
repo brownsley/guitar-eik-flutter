@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/search/search_bloc.dart';
+import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
 import 'package:guitar_eik/presentation/widgets/components/list/artists_list.dart';
-import 'package:guitar_eik/presentation/widgets/components/song_list.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -105,7 +105,28 @@ class _SearchPageState extends State<SearchPage> {
                               ),
                             ),
                           ),
-                          SongList(songs: state.songs),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.songs.length,
+                            itemBuilder: (context, index) {
+                              final song = state.songs[index];
+
+                              return SongListItem(
+                                views: song.totalView,
+                                title: song.title,
+                                artist: (song.artists?.isNotEmpty ?? false)
+                                    ? song.artists?.first.name ?? "Unknown"
+                                    : "Unknown",
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    "/song",
+                                    arguments: song.id,
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ],
                       ],
                     );

@@ -9,7 +9,13 @@ final class AlbumLoading extends AlbumState {}
 
 final class AlbumLoaded extends AlbumState {
   final List<Album> albums;
-  AlbumLoaded(this.albums);
+  final bool isLast;
+  final int currentPage;
+  AlbumLoaded({
+    required this.albums,
+    required this.isLast,
+    this.currentPage = 0,
+  });
 }
 
 final class AlbumError extends AlbumState {

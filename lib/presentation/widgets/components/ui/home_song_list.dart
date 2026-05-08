@@ -28,7 +28,7 @@ class HomeSongList extends StatelessWidget {
           }
 
           return SizedBox(
-            height: 120,
+            height: 130,
 
             child: ListView.builder(
               scrollDirection: Axis.horizontal,

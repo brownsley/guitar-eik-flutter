@@ -34,7 +34,7 @@ class ArtistService {
     }
   }
 
-  Future<List<Artist>> querySearch(String query) async {
+  Future<List<Artist>> searchArtist(String query) async {
     try {
       final response = await _dio.get(
         "/artists/search",

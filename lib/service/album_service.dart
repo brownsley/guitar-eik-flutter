@@ -11,14 +11,36 @@ class AlbumService {
     ),
   );
 
-  Future<List<Album>> getAllAlbum() async {
+  Future<Map<String, dynamic>> getAllAlbum({int page = 0}) async {
     try {
-      final response = await _dio.get("/album");
+      final response = await _dio.get(
+        "/albums",
+        queryParameters: {'page': page, 'size': 20},
+      );
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data;
-        return data.map((json) => Album.fromJson(json)).toList();
+        List<dynamic> data = response.data["content"];
+        bool last = response.data["last"];
+        List<Album> albums = data.map((json) => Album.fromJson(json)).toList();
+        return {"albums": albums, "isLast": last};
       } else {
         throw "Server returned status code: ${response.statusCode}";
+      }
+    } on DioException catch (e) {
+      throw e.message ?? "Error occurred";
+    }
+  }
+
+  Future<List<Album>> searchAlbum(String query) async {
+    try {
+      final response = await _dio.get(
+        "/albums/search",
+        queryParameters: {'query': query},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data.map((json) => Album.fromJson(json)).toList();
+      } else {
+        throw "Server error: ${response.statusCode}";
       }
     } on DioException catch (e) {
       throw e.message ?? "Error occurred";

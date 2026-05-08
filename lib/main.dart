@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guitar_eik/core/theme/app_theme.dart';
+import 'package:guitar_eik/logic/album/album_cubit.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
 import 'package:guitar_eik/logic/artist/detail/artist_detail_cubit.dart';
 import 'package:guitar_eik/logic/chord/chord_cubit.dart';
-import 'package:guitar_eik/logic/cubit/album_cubit.dart';
 import 'package:guitar_eik/logic/navigation/navigation_cubit.dart';
 import 'package:guitar_eik/logic/search/search_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
@@ -101,7 +101,7 @@ class MyHomePage extends StatelessWidget {
             label: "Songs",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.queue_music_outlined, size: 30),
+            icon: Icon(Icons.album, size: 30),
             label: "Album",
           ),
           BottomNavigationBarItem(

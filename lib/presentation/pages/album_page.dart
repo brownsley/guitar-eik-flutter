@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guitar_eik/logic/cubit/album_cubit.dart';
+import 'package:guitar_eik/logic/album/album_cubit.dart';
+import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
 import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
 
 class AlbumPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _AlbumPageState extends State<AlbumPage> {
   @override
   void initState() {
     super.initState();
-    context.read<AlbumCubit>().getAlbum();
+    context.read<AlbumCubit>().load();
   }
 
   @override
@@ -52,21 +53,23 @@ class _AlbumPageState extends State<AlbumPage> {
           }
 
           if (state is AlbumLoaded) {
-            return ListView.builder(
-              itemCount: state.albums.length,
-              itemBuilder: (context, index) {
-                final album = state.albums[index];
+            if (state.albums.isEmpty) {
+              return const Center(child: Text("No artists found."));
+            }
+            return RefreshIndicator(
+              onRefresh: () => context.read<AlbumCubit>().load(),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.albums.length,
+                itemBuilder: (context, index) {
+                  final album = state.albums[index];
 
-                return ListTile(
-                  title: Text(album.name),
-                  leading: Image.network(
-                    album.cover,
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
+                  return AlbumCard(
+                    albumTitle: album.name,
+                    coverUrl: album.cover,
+                  );
+                },
+              ),
             );
           }
 
