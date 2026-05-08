@@ -39,7 +39,6 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // 1. Avatar with Border Radius
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
@@ -49,8 +48,7 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(width: 16), // Space between image and text
-                    // 2. Artist Details
+                    const SizedBox(width: 16), 
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,10 +71,8 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                           ),
                           const SizedBox(height: 12),
 
-                          // 3. YouTube Button (Minimalist version)
                           InkWell(
                             onTap: () {
-                              // YouTube link logic
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
