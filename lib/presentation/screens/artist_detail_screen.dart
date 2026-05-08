@@ -48,7 +48,7 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(width: 16), 
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,8 +72,7 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                           const SizedBox(height: 12),
 
                           InkWell(
-                            onTap: () {
-                            },
+                            onTap: () {},
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 10,

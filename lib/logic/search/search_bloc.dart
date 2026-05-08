@@ -10,7 +10,7 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  ArtistService artistService = ArtistService();
+  final ArtistService artistService = ArtistService();
   SongService songService = SongService();
   SearchBloc() : super(SearchInitial()) {
     on<OnQueryChanged>(
