@@ -1,11 +1,9 @@
-import 'package:guitar_eik/model/artist_model.dart';
-
 class Song {
   final int id;
   final String title;
   final String? lyric;
   final int totalView;
-  final List<Artist>? artists;
+  final List<String>? artists;
 
   Song({
     required this.id,
@@ -22,7 +20,7 @@ class Song {
     totalView: json["totalView"] ?? 0,
     artists: json["artists"] == null
         ? null
-        : List<Artist>.from(json["artists"].map((x) => Artist.fromJson(x))),
+        : List<String>.from(json["artists"].map((x) => x["name"].toString())),
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +28,6 @@ class Song {
     "title": title,
     "lyric": lyric,
     "totalView": totalView,
-    "artists": artists?.map((x) => x.toJson()).toList(),
+    "artists": artists,
   };
 }

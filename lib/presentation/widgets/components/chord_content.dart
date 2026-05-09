@@ -71,9 +71,7 @@ class ChordContent extends StatelessWidget {
                                 child: Text(
                                   (state.song.artists != null &&
                                           state.song.artists!.isNotEmpty)
-                                      ? state.song.artists!
-                                            .map((a) => a.name)
-                                            .join(", ")
+                                      ? state.song.artists!.join(", ")
                                       : "Unknown",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,

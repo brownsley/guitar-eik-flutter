@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/search/search_bloc.dart';
+import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
 import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
 import 'package:guitar_eik/presentation/widgets/components/list/artists_list.dart';
 
@@ -61,7 +62,9 @@ class _SearchPageState extends State<SearchPage> {
                   }
 
                   if (state is SearchSuccess) {
-                    if (state.artists.isEmpty && state.songs.isEmpty) {
+                    if (state.artists.isEmpty &&
+                        state.songs.isEmpty &&
+                        state.albums.isEmpty) {
                       return const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +83,12 @@ class _SearchPageState extends State<SearchPage> {
                       children: [
                         if (state.artists.isNotEmpty) ...[
                           const Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.only(
+                              left: 16,
+                              top: 5,
+                              right: 0,
+                              bottom: 8,
+                            ),
                             child: Text(
                               "Artists",
                               style: TextStyle(
@@ -94,9 +102,56 @@ class _SearchPageState extends State<SearchPage> {
                             child: ArtistHorizontalList(artists: state.artists),
                           ),
                         ],
+                        if (state.albums.isNotEmpty) ...[
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              left: 16,
+                              top: 5,
+                              right: 0,
+                              bottom: 8,
+                            ),
+                            child: Text(
+                              "Albums",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                              ),
+                              itemCount: state.albums.length,
+                              itemBuilder: (context, index) {
+                                final album = state.albums[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 5),
+                                  child: SizedBox(
+                                    width: 300,
+                                    child: AlbumCard(
+                                      albumTitle: album.name,
+                                      songCount: album.id,
+                                      coverUrl: album.cover,
+                                      onTap: () {},
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                         if (state.songs.isNotEmpty) ...[
                           const Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.only(
+                              left: 16,
+                              top: 5,
+                              right: 0,
+                              bottom: 8,
+                            ),
                             child: Text(
                               "Songs",
                               style: TextStyle(
@@ -107,6 +162,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                           ListView.builder(
                             shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: state.songs.length,
                             itemBuilder: (context, index) {
                               final song = state.songs[index];
@@ -114,9 +170,7 @@ class _SearchPageState extends State<SearchPage> {
                               return SongListItem(
                                 views: song.totalView,
                                 title: song.title,
-                                artist: (song.artists?.isNotEmpty ?? false)
-                                    ? song.artists?.first.name ?? "Unknown"
-                                    : "Unknown",
+                                artists: song.artists ?? [],
                                 onTap: () {
                                   Navigator.pushNamed(
                                     context,

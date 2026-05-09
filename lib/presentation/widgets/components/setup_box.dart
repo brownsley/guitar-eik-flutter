@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/chord/chord_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/setup_button.dart';
 import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SetupBox extends StatefulWidget {
   const SetupBox({super.key});
@@ -14,16 +14,26 @@ class SetupBox extends StatefulWidget {
 class _SetupBoxState extends State<SetupBox> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return BlocBuilder<ChordCubit, ChordState>(
       builder: (context, state) {
         if (state is! ChordLoaded) {
-          return LoadingView();
+          return const LoadingView();
         }
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -42,7 +52,7 @@ class _SetupBoxState extends State<SetupBox> {
                   ),
                   SetupButton(
                     icon: Icons.remove,
-                    onPressed: () => {context.read<ChordCubit>().removeSpeed()},
+                    onPressed: () => context.read<ChordCubit>().removeSpeed(),
                   ),
                   Expanded(
                     child: SliderTheme(
@@ -51,17 +61,16 @@ class _SetupBoxState extends State<SetupBox> {
                         thumbShape: const RoundSliderThumbShape(
                           enabledThumbRadius: 9,
                         ),
-                        overlayShape: const RoundSliderOverlayShape(
-                          overlayRadius: 15,
-                        ),
                       ),
                       child: Slider(
                         value: state.speed.toDouble(),
                         min: 3,
                         max: 30,
                         divisions: 27,
-                        activeColor: Colors.black,
-                        inactiveColor: Colors.black12,
+                        activeColor: colorScheme.primary,
+                        inactiveColor: colorScheme.primaryContainer.withOpacity(
+                          0.3,
+                        ),
                         onChanged: (value) => context
                             .read<ChordCubit>()
                             .updateSpeed(value.toInt()),
@@ -70,9 +79,7 @@ class _SetupBoxState extends State<SetupBox> {
                   ),
                   SetupButton(
                     icon: Icons.add,
-                    onPressed: () {
-                      context.read<ChordCubit>().addSpeed();
-                    },
+                    onPressed: () => context.read<ChordCubit>().addSpeed(),
                   ),
                   SizedBox(
                     width: 35,
@@ -90,11 +97,11 @@ class _SetupBoxState extends State<SetupBox> {
               const Divider(height: 25, thickness: 1),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 120,
                     child: Text(
                       "Transpose",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -102,9 +109,8 @@ class _SetupBoxState extends State<SetupBox> {
                   ),
                   SetupButton(
                     icon: Icons.exposure_minus_1,
-                    onPressed: () => {
-                      context.read<ChordCubit>().updateTranspose(-1),
-                    },
+                    onPressed: () =>
+                        context.read<ChordCubit>().updateTranspose(-1),
                   ),
                   Expanded(
                     child: Text(
@@ -118,15 +124,13 @@ class _SetupBoxState extends State<SetupBox> {
                   ),
                   SetupButton(
                     icon: Icons.plus_one,
-                    onPressed: () => {
-                      context.read<ChordCubit>().updateTranspose(1),
-                    },
+                    onPressed: () =>
+                        context.read<ChordCubit>().updateTranspose(1),
                   ),
                   SetupButton(
                     icon: Icons.refresh,
-                    onPressed: () => {
-                      context.read<ChordCubit>().resetTranspose(),
-                    },
+                    onPressed: () =>
+                        context.read<ChordCubit>().resetTranspose(),
                   ),
                   const SizedBox(width: 10),
                 ],

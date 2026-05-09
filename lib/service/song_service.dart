@@ -42,15 +42,17 @@ class SongService {
     }
   }
 
-  Future<List<Song>> getAllSongSummary() async {
+  Future<Map<String, dynamic>> getAllSongSummary({int page = 0}) async {
     try {
       final response = await _dio.get(
         "/songs",
-        queryParameters: {'page': 0, 'size': 500},
+        queryParameters: {'page': page, 'size': 500},
       );
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data["content"];
-        return data.map((json) => Song.fromJson(json)).toList();
+        List<dynamic> data = response.data['content'];
+        bool last = response.data["last"];
+        List<Song> songs = data.map((json) => Song.fromJson(json)).toList();
+        return {"songs": songs, "isLast": last};
       } else {
         throw Exception('Failed to load songs');
       }

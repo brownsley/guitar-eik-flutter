@@ -9,7 +9,9 @@ final class SongLoading extends SongState {}
 
 class SongLoaded extends SongState {
   final List<Song> songs;
-  SongLoaded(this.songs);
+  final bool isLast;
+  final int currentPage;
+  SongLoaded({required this.songs, required this.isLast, this.currentPage = 0});
 }
 
 class SongError extends SongState {

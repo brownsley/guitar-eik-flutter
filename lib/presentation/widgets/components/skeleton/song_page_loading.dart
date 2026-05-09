@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skeleton_ui/flutter_skeleton_ui.dart';
 
-class SongsLoading extends StatelessWidget {
-  final int itemCount;
-
-  const SongsLoading({super.key, this.itemCount = 10});
+class SongsPageLoading extends StatelessWidget {
+  const SongsPageLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      shrinkWrap: true,
+      itemCount: 8,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: itemCount,
+      shrinkWrap: true,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 13.0, horizontal: 20.0),
           child: Row(
             children: [
-              const SizedBox(width: 10),
               const SkeletonAvatar(
                 style: SkeletonAvatarStyle(
                   height: 60,
                   width: 60,
-                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
               ),
               const SizedBox(width: 12),
@@ -30,17 +27,14 @@ class SongsLoading extends StatelessWidget {
                 child: SkeletonParagraph(
                   style: SkeletonParagraphStyle(
                     lines: 2,
-                    spacing: 10,
+                    spacing: 8,
                     lineStyle: SkeletonLineStyle(
                       height: 15,
                       borderRadius: BorderRadius.circular(4),
-                      minLength: MediaQuery.of(context).size.width / 3,
-                      maxLength: MediaQuery.of(context).size.width / 1.5,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
             ],
           ),
         );

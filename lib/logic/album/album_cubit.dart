@@ -36,7 +36,7 @@ class AlbumCubit extends Cubit<AlbumState> {
         int nextPage = currentState.currentPage + 1;
         final response = await _albumSercice.getAllAlbum(page: nextPage);
         List<Album> updateList = List.from(currentState.albums)
-          ..add(response["albums"]);
+          ..addAll(response["albums"]);
         emit(
           AlbumLoaded(
             albums: updateList,

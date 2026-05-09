@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
+import 'package:guitar_eik/logic/favorite/favorite_cubit.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/list/artists_list.dart';
 import 'package:guitar_eik/presentation/widgets/components/skeleton/artists_loading.dart';
@@ -8,6 +9,7 @@ import 'package:guitar_eik/presentation/widgets/components/ui/banner_ads.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/home_hero_ads.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/home_song_list.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/section_header.dart';
+import 'package:guitar_eik/presentation/widgets/components/ui/song_pager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -75,6 +77,28 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+
+            BlocBuilder<FavoriteCubit, FavoriteState>(
+              builder: (context, state) {
+                if (state is FavoriteLoaded) {
+                  final songs = state.favoriteSongs;
+
+                  if (songs.isEmpty) {
+                    return SizedBox.shrink();
+                  }
+
+                  return Column(
+                    children: [
+                      SectionHeader(title: "Favorite", isDark: isDark),
+
+                      SongPager(songs: state.favoriteSongs),
+                    ],
+                  );
+                }
+                return SizedBox.shrink();
+              },
+            ),
+
             SectionHeader(title: "Top Charts", isDark: isDark),
             const HomeSongList(),
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
-import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
+import 'package:guitar_eik/presentation/widgets/components/skeleton/song_page_loading.dart';
 
 class SongPage extends StatefulWidget {
   const SongPage({super.key});
@@ -12,11 +12,28 @@ class SongPage extends StatefulWidget {
 }
 
 class _SongPageState extends State<SongPage> {
+  // ignore: prefer_final_fields
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    // ပထမဆုံးအကြိမ် Load လုပ်မယ်
     context.read<SongCubit>().loadSongs();
+
+    _scrollController.addListener(() {
+      final state = context.read<SongCubit>().state;
+      if (state is SongLoaded && !state.isLast) {
+        if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 300) {
+          context.read<SongCubit>().loadMore();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,7 +61,7 @@ class _SongPageState extends State<SongPage> {
         child: BlocBuilder<SongCubit, SongState>(
           builder: (context, state) {
             if (state is SongLoading) {
-              return const LoadingView();
+              return const SongsPageLoading();
             }
 
             if (state is SongLoaded) {
@@ -54,34 +71,42 @@ class _SongPageState extends State<SongPage> {
               return RefreshIndicator(
                 onRefresh: () => context.read<SongCubit>().loadSongs(),
                 child: ListView.builder(
+                  controller: _scrollController,
                   shrinkWrap: true,
-                  itemCount: state.songs.length,
+                  itemCount: state.isLast
+                      ? state.songs.length
+                      : state.songs.length + 1,
                   itemBuilder: (context, index) {
-                    final song = state.songs[index];
+                    if (index < state.songs.length) {
+                      final song = state.songs[index];
 
-                    return SongListItem(
-                      views: song.totalView,
-                      title: song.title,
-                      artist: (song.artists?.isNotEmpty ?? false)
-                          ? song.artists?.first.name ?? "Unknown"
-                          : "Unknown",
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          "/song",
-                          arguments: song.id,
-                        );
-                      },
-                    );
+                      return SongListItem(
+                        views: song.totalView,
+                        title: song.title,
+                        artists: song.artists ?? [],
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            "/song",
+                            arguments: song.id,
+                          );
+                        },
+                      );
+                    } else {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: CircularProgressIndicator(strokeWidth: 4),
+                        ),
+                      );
+                    }
                   },
                 ),
               );
             }
-
             if (state is SongError) {
               return Center(child: Text('Error: ${state.message}'));
             }
-
             return const Center(child: Text('Welcome! Search for music.'));
           },
         ),

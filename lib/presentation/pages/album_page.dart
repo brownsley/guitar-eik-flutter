@@ -12,10 +12,29 @@ class AlbumPage extends StatefulWidget {
 }
 
 class _AlbumPageState extends State<AlbumPage> {
+  // ignore: unused_field
+  ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     context.read<AlbumCubit>().load();
+
+    _scrollController.addListener(() {
+      final state = context.read<AlbumCubit>().state;
+      if (state is AlbumLoaded && !state.isLast) {
+        if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 300) {
+          context.read<AlbumCubit>().loadMore();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,15 +78,26 @@ class _AlbumPageState extends State<AlbumPage> {
             return RefreshIndicator(
               onRefresh: () => context.read<AlbumCubit>().load(),
               child: ListView.builder(
+                controller: _scrollController,
                 shrinkWrap: true,
-                itemCount: state.albums.length,
+                itemCount: state.isLast
+                    ? state.albums.length
+                    : state.albums.length + 1,
                 itemBuilder: (context, index) {
-                  final album = state.albums[index];
-
-                  return AlbumCard(
-                    albumTitle: album.name,
-                    coverUrl: album.cover,
-                  );
+                  if (index < state.albums.length) {
+                    final album = state.albums[index];
+                    return AlbumCard(
+                      albumTitle: album.name,
+                      coverUrl: album.cover,
+                    );
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Center(
+                        child: CircularProgressIndicator(strokeWidth: 4),
+                      ),
+                    );
+                  }
                 },
               ),
             );

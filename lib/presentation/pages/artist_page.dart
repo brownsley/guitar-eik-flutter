@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/card/artist_card.dart';
-import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
+import 'package:guitar_eik/presentation/widgets/components/skeleton/artists_page_loading.dart';
 
 class ArtistPage extends StatefulWidget {
   const ArtistPage({super.key});
@@ -22,7 +22,7 @@ class _ArtistPageState extends State<ArtistPage> {
       final state = context.read<ArtistCubit>().state;
       if (state is ArtistLoaded && !state.isLast) {
         if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 200) {
+            _scrollController.position.maxScrollExtent - 300) {
           context.read<ArtistCubit>().loadMore();
         }
       }
@@ -61,7 +61,7 @@ class _ArtistPageState extends State<ArtistPage> {
       body: BlocBuilder<ArtistCubit, ArtistState>(
         builder: (context, state) {
           if (state is ArtistLoading) {
-            return const LoadingView();
+            return const ArtistPageLoading();
           }
 
           if (state is ArtistLoaded) {
