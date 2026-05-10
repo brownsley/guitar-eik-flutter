@@ -69,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
                         if (state.artists.isNotEmpty) ...[
                           _buildSectionTitle("Artists", textColor),
                           SizedBox(
-                            height: 180,
+                            height: 240,
                             child: ArtistHorizontalList(artists: state.artists),
                           ),
                         ],
@@ -94,7 +94,11 @@ class _SearchPageState extends State<SearchPage> {
                                     albumTitle: album.name,
                                     coverUrl: album.cover,
                                     songCount: 0,
-                                    onTap: () {},
+                                    onTap: () => Navigator.pushNamed(
+                                      context,
+                                      "/album",
+                                      arguments: album.id,
+                                    ),
                                   ),
                                 );
                               },
@@ -111,7 +115,11 @@ class _SearchPageState extends State<SearchPage> {
                                   title: song.title,
                                   artists: song.artists ?? [],
                                   views: song.totalView,
-                                  onTap: () {},
+                                  onTap: () => Navigator.pushNamed(
+                                    context,
+                                    "/song",
+                                    arguments: song.id,
+                                  ),
                                 ),
                               ),
                         ],

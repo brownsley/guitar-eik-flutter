@@ -91,13 +91,11 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                           title: song.title,
                           artists: song.artists ?? [],
                           views: song.totalView,
-                          onTap: () => {
-                            Navigator.pushNamed(
-                              context,
-                              "/song",
-                              arguments: song.id,
-                            ),
-                          },
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            "/song",
+                            arguments: song.id,
+                          ),
                         );
                       },
                     ),

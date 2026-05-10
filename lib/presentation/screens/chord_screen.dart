@@ -18,7 +18,8 @@ class _ChordScreenState extends State<ChordScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_isDataLoaded) {
-      final id = ModalRoute.of(context)!.settings.arguments as int;
+      final idStr = ModalRoute.of(context)!.settings.arguments.toString();
+      final id = int.parse(idStr);
       context.read<ChordCubit>().load(id);
       _isDataLoaded = true;
     }

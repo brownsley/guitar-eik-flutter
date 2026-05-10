@@ -1,7 +1,7 @@
-import 'package:guitar_eik/model/song_model.dart';
-import 'package:guitar_eik/service/song_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:guitar_eik/model/song_model.dart';
+import 'package:guitar_eik/service/song_service.dart';
 
 part 'chord_state.dart';
 
@@ -12,7 +12,7 @@ class ChordCubit extends Cubit<ChordState> {
   void load(int id) async {
     emit(ChordLoading());
     final Song song = await _songService.getSongDetail(id);
-    emit(ChordLoaded(song: song, isScrolling: false, transpose: 0, speed: 15));
+    emit(ChordLoaded(song: song, isScrolling: false, transpose: 0, speed: 10));
   }
 
   void toggleScroll() {

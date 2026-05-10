@@ -54,7 +54,7 @@ class _AlbumPagerState extends State<AlbumPager> {
                   songCount: 0,
                   onTap: () => Navigator.pushNamed(
                     context,
-                    "/album_details",
+                    "/album",
                     arguments: limitedAlbums[secondIndex].id,
                   ),
                 ),
