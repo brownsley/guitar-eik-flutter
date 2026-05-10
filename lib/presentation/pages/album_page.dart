@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/album/album_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
-import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
+import 'package:guitar_eik/presentation/widgets/components/shimmer/albums_page_loading.dart';
 
 class AlbumPage extends StatefulWidget {
   const AlbumPage({super.key});
@@ -64,7 +64,7 @@ class _AlbumPageState extends State<AlbumPage> {
       body: BlocBuilder<AlbumCubit, AlbumState>(
         builder: (context, state) {
           if (state is AlbumLoading) {
-            return LoadingView();
+            return AlbumPageLoading(8);
           }
 
           if (state is AlbumError) {
@@ -89,6 +89,11 @@ class _AlbumPageState extends State<AlbumPage> {
                     return AlbumCard(
                       albumTitle: album.name,
                       coverUrl: album.cover,
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        "/album",
+                        arguments: album.id,
+                      ),
                     );
                   } else {
                     return const Padding(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/skeleton/songs_loading.dart';
+import 'package:guitar_eik/presentation/widgets/components/shimmer/song_page_loading.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/song_pager.dart';
 
 class HomeSongList extends StatefulWidget {
@@ -25,7 +25,7 @@ class _HomeSongListState extends State<HomeSongList> {
     return BlocBuilder<SongCubit, SongState>(
       builder: (context, state) {
         if (state is SongLoading) {
-          return const SongsLoading();
+          return const SongsPageLoading(2);
         }
         if (state is SongLoaded) {
           final songs = state.songs;

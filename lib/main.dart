@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guitar_eik/core/theme/app_theme.dart';
 import 'package:guitar_eik/logic/album/album_cubit.dart';
+import 'package:guitar_eik/logic/album/detail/album_detail_cubit.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
 import 'package:guitar_eik/logic/artist/detail/artist_detail_cubit.dart';
 import 'package:guitar_eik/logic/chord/chord_cubit.dart';
@@ -18,6 +19,7 @@ import 'package:guitar_eik/presentation/pages/home_page.dart';
 import 'package:guitar_eik/presentation/pages/search_page.dart';
 import 'package:guitar_eik/presentation/pages/setting_page.dart';
 import 'package:guitar_eik/presentation/pages/song_page.dart';
+import 'package:guitar_eik/presentation/screens/album_detail_screen.dart';
 import 'package:guitar_eik/presentation/screens/artist_detail_screen.dart';
 import 'package:guitar_eik/presentation/screens/chord_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -44,6 +46,7 @@ Future<void> main() async {
         BlocProvider(create: (create) => SongCubit()),
         BlocProvider(create: (create) => ArtistCubit()),
         BlocProvider(create: (create) => ArtistDetailCubit()),
+        BlocProvider(create: (create) => AlbumDetailCubit()),
         BlocProvider(create: (create) => SearchBloc()),
         BlocProvider(create: (create) => AlbumCubit()),
         BlocProvider(create: (create) => FavoriteCubit()),
@@ -70,6 +73,7 @@ class MyApp extends StatelessWidget {
           routes: {
             "/song": (context) => ChordScreen(),
             "/artist": (context) => ArtistDetailScreen(),
+            "/album": (context) => AlbumDetailScreen(),
             "/search": (context) => SearchPage(),
           },
         );

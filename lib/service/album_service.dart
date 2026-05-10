@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:guitar_eik/model/album_detail_model.dart';
 import 'package:guitar_eik/model/album_model.dart';
 
 class AlbumService {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: dotenv.get("API_URL"),
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
     ),
   );
 
@@ -25,6 +26,15 @@ class AlbumService {
       } else {
         throw "Server returned status code: ${response.statusCode}";
       }
+    } on DioException catch (e) {
+      throw e.message ?? "Error occurred";
+    }
+  }
+
+  Future<AlbumDetail> getAlbumDetail(int id) async {
+    try {
+      final response = await _dio.get("/albums/$id");
+      return AlbumDetail.fromJson(response.data);
     } on DioException catch (e) {
       throw e.message ?? "Error occurred";
     }

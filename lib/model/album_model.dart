@@ -9,7 +9,7 @@ class Album {
     return Album(
       cover: json["cover"] ?? "",
       id: json["id"] ?? 0,
-      name: json["name"] ?? "Unknown",
+      name: json["name"] ?? "Untitle",
     );
   }
 

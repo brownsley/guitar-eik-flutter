@@ -20,10 +20,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _onSearch,
       transformer: (events, mapper) {
         return events
-            .debounceTime(Duration(microseconds: 1000))
+            .debounceTime(Duration(milliseconds: 1000))
             .switchMap(mapper);
       },
     );
+
+    on<OnResetSearch>((event, emit) => emit(SearchInitial()));
   }
 
   Future<void> _onSearch(

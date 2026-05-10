@@ -6,8 +6,8 @@ class SongService {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: dotenv.get("API_URL"),
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
     ),
   );
 
@@ -15,7 +15,7 @@ class SongService {
     try {
       final response = await _dio.get('/songs/$id');
       if (response.statusCode == 200) {
-        Future.delayed(Duration(milliseconds: 3000));
+        Future.delayed(Duration(milliseconds: 30000));
         return Song.fromJson(response.data);
       } else {
         throw Exception('Failed to load songs');

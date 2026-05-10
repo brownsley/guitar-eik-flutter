@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/search/search_bloc.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
+import 'package:guitar_eik/logic/theme/theme_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/list/artists_list.dart';
+import 'package:guitar_eik/presentation/widgets/utils/empty_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -13,9 +13,38 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _searchController = TextEditingController();
+  late SearchBloc _searchBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchBloc = context.read<SearchBloc>();
+  }
+
+  @override
+  void dispose() {
+    _searchBloc.add(OnResetSearch());
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeCubit>().state;
+
+    final Color backgroundColor = isDark
+        ? const Color(0xFF121212)
+        : Colors.white;
+    final Color containerColor = isDark
+        ? const Color(0xFF1E1E1E)
+        : const Color(0xFFF2EDED);
+    final Color textColor = isDark ? Colors.white : Colors.black87;
+    final Color subTextColor = isDark ? Colors.white70 : Colors.black54;
+    final Color hintColor = isDark ? Colors.grey[500]! : Colors.grey[600]!;
+
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -23,27 +52,30 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back_ios_new),
+                  icon: Icon(Icons.arrow_back_ios_new, color: textColor),
                 ),
-
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 232, 223, 223),
+                      color: containerColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: TextField(
-                      decoration: const InputDecoration(
+                      controller: _searchController,
+                      style: TextStyle(color: textColor),
+                      decoration: InputDecoration(
                         hintText: "Search Artist or Songs",
+                        hintStyle: TextStyle(color: hintColor),
+                        prefixIcon: Icon(Icons.search, color: hintColor),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 0,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12,
                           horizontal: 12,
                         ),
                       ),
                       onChanged: (value) {
-                        context.read<SearchBloc>().add(OnQueryChanged(value));
+                        _searchBloc.add(OnQueryChanged(value));
                       },
                     ),
                   ),
@@ -53,146 +85,55 @@ class _SearchPageState extends State<SearchPage> {
             Expanded(
               child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
-                  if (state is SearchLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state is SearchError) {
-                    return Center(child: Text(state.message));
-                  }
-
                   if (state is SearchSuccess) {
                     if (state.artists.isEmpty &&
                         state.songs.isEmpty &&
                         state.albums.isEmpty) {
-                      return const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search_off,
-                              size: 80,
-                              color: Colors.grey,
-                            ),
-                            Text("No results found"),
-                          ],
-                        ),
-                      );
+                      return const EmptyPage();
                     }
                     return ListView(
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         if (state.artists.isNotEmpty) ...[
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              left: 16,
-                              top: 5,
-                              right: 0,
-                              bottom: 8,
-                            ),
-                            child: Text(
-                              "Artists",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                          _buildSectionTitle("Artists", textColor),
                           SizedBox(
                             height: 250,
                             child: ArtistHorizontalList(artists: state.artists),
                           ),
                         ],
                         if (state.albums.isNotEmpty) ...[
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              left: 16,
-                              top: 5,
-                              right: 0,
-                              bottom: 8,
-                            ),
-                            child: Text(
-                              "Albums",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 120,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                              ),
-                              itemCount: state.albums.length,
-                              itemBuilder: (context, index) {
-                                final album = state.albums[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: SizedBox(
-                                    width: 300,
-                                    child: AlbumCard(
-                                      albumTitle: album.name,
-                                      songCount: album.id,
-                                      coverUrl: album.cover,
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                          _buildSectionTitle("Albums", textColor),
                         ],
                         if (state.songs.isNotEmpty) ...[
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              left: 16,
-                              top: 5,
-                              right: 0,
-                              bottom: 8,
-                            ),
-                            child: Text(
-                              "Songs",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.songs.length,
-                            itemBuilder: (context, index) {
-                              final song = state.songs[index];
-
-                              return SongListItem(
-                                views: song.totalView,
-                                title: song.title,
-                                artists: song.artists ?? [],
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    "/song",
-                                    arguments: song.id,
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                          _buildSectionTitle("Songs", textColor),
                         ],
                       ],
                     );
                   }
-
-                  return const Center(
-                    child: Text("Search for your favorite artist"),
+                  return Center(
+                    child: Text(
+                      "Search for your favorite artist",
+                      style: TextStyle(color: subTextColor),
+                    ),
                   );
                 },
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title, Color textColor) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: textColor,
         ),
       ),
     );
