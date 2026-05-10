@@ -20,7 +20,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _onSearch,
       transformer: (events, mapper) {
         return events
-            .debounceTime(Duration(milliseconds: 1000))
+            .debounceTime(Duration(milliseconds: 500))
             .switchMap(mapper);
       },
     );

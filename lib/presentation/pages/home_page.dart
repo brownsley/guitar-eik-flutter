@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                   if (albums.isEmpty) {
                     return SizedBox.shrink();
                   }
-                  return Column(children: [AlbumPager(albums: albums)]);
+                  return AlbumPager(albums: albums);
                 }
                 return SizedBox.shrink();
               },
