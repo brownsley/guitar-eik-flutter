@@ -1,6 +1,6 @@
+import 'package:bloc/bloc.dart';
 import 'package:guitar_eik/model/artist_model.dart';
 import 'package:guitar_eik/service/artist_service.dart';
-import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'artist_state.dart';

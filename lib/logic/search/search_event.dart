@@ -7,3 +7,5 @@ class OnQueryChanged extends SearchEvent {
   final String query;
   OnQueryChanged(this.query);
 }
+
+class OnResetSearch extends SearchEvent {}

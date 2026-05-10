@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:guitar_eik/model/album_model.dart';
 import 'package:guitar_eik/model/artist_model.dart';
 import 'package:guitar_eik/model/song_model.dart';
+import 'package:guitar_eik/service/album_service.dart';
 import 'package:guitar_eik/service/artist_service.dart';
 import 'package:guitar_eik/service/song_service.dart';
 import 'package:meta/meta.dart';
@@ -10,17 +12,20 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  ArtistService artistService = ArtistService();
-  SongService songService = SongService();
+  final ArtistService artistService = ArtistService();
+  final SongService songService = SongService();
+  final AlbumService albumService = AlbumService();
   SearchBloc() : super(SearchInitial()) {
     on<OnQueryChanged>(
       _onSearch,
       transformer: (events, mapper) {
         return events
-            .debounceTime(Duration(microseconds: 50))
+            .debounceTime(Duration(milliseconds: 1000))
             .switchMap(mapper);
       },
     );
+
+    on<OnResetSearch>((event, emit) => emit(SearchInitial()));
   }
 
   Future<void> _onSearch(
@@ -32,9 +37,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
     emit(SearchLoading());
     try {
-      final artists = await artistService.querySearch(event.query);
+      final artists = await artistService.searchArtist(event.query);
       final songs = await songService.searchSong(event.query);
-      emit(SearchSuccess(artists, songs));
+      final albums = await albumService.searchAlbum(event.query);
+      emit(SearchSuccess(artists, songs, albums));
     } catch (e) {
       emit(SearchError(e.toString()));
     }

@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/chord/chord_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/chord_content.dart';
 import 'package:guitar_eik/presentation/widgets/components/chord_screen_app_bar.dart';
 import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChordScreen extends StatefulWidget {
   const ChordScreen({super.key});

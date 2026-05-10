@@ -1,19 +1,25 @@
+import 'package:guitar_eik/model/album_model.dart';
 import 'package:guitar_eik/model/artist_model.dart';
 import 'package:guitar_eik/model/song_model.dart';
 
 class ArtistDetail {
   final Artist info;
   final List<Song> songs;
+  final List<Album> albums;
   final int totalTrack;
 
   ArtistDetail({
     required this.info,
     required this.songs,
+    required this.albums,
     required this.totalTrack,
   });
 
   factory ArtistDetail.fromJson(Map<String, dynamic> json) => ArtistDetail(
     info: Artist.fromJson(json),
+    albums: json["albums"] == null
+        ? []
+        : List<Album>.from(json["albums"].map((x) => Album.fromJson(x))),
     songs: json["songs"] == null
         ? []
         : List<Song>.from(json["songs"].map((x) => Song.fromJson(x))),

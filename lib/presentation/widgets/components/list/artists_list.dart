@@ -20,7 +20,7 @@ class ArtistHorizontalList extends StatelessWidget {
           child: ArtistCard(
             artistName: artist.name,
             imageUrl: artist.avatar,
-            totalSongs: artist.totalTrack!,
+            totalSongs: artist.totalTrack ?? 0,
             onTap: () {
               Navigator.pushNamed(context, "/artist", arguments: artist.id);
             },

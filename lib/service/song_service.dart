@@ -6,8 +6,8 @@ class SongService {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: dotenv.get("API_URL"),
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
     ),
   );
 
@@ -15,7 +15,7 @@ class SongService {
     try {
       final response = await _dio.get('/songs/$id');
       if (response.statusCode == 200) {
-        Future.delayed(Duration(milliseconds: 3000));
+        Future.delayed(Duration(milliseconds: 30000));
         return Song.fromJson(response.data);
       } else {
         throw Exception('Failed to load songs');
@@ -42,15 +42,17 @@ class SongService {
     }
   }
 
-  Future<List<Song>> getAllSongSummary() async {
+  Future<Map<String, dynamic>> getAllSongSummary({int page = 0}) async {
     try {
       final response = await _dio.get(
         "/songs",
-        queryParameters: {'page': 0, 'size': 500},
+        queryParameters: {'page': page, 'size': 500},
       );
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data["content"];
-        return data.map((json) => Song.fromJson(json)).toList();
+        List<dynamic> data = response.data['content'];
+        bool last = response.data["last"];
+        List<Song> songs = data.map((json) => Song.fromJson(json)).toList();
+        return {"songs": songs, "isLast": last};
       } else {
         throw Exception('Failed to load songs');
       }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/chord/chord_cubit.dart';
+import 'package:guitar_eik/logic/favorite/favorite_cubit.dart';
+import 'package:guitar_eik/model/song.dart';
 
 import 'setup_box.dart';
 
@@ -19,6 +21,36 @@ class ChordScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
+        BlocBuilder<FavoriteCubit, FavoriteState>(
+          builder: (context, state) {
+            final chordState = context.watch<ChordCubit>().state;
+            if (chordState is ChordLoaded) {
+              final songData = chordState.song;
+              final isFavorite = context.read<FavoriteCubit>().isFavorite(
+                songData.id,
+              );
+              return IconButton(
+                onPressed: () {
+                  final songToSave = Song(
+                    id: songData.id,
+                    title: songData.title,
+                    totalView: songData.totalView,
+                    artists: (songData.artists as List)
+                        .map((e) => e.toString())
+                        .toList(),
+                    lyric: songData.lyric ?? '',
+                  );
+                  context.read<FavoriteCubit>().toggleFavorite(songToSave);
+                },
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_outline,
+                  color: isFavorite ? Colors.redAccent : Colors.grey,
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
         IconButton(
           onPressed: () {
             final state = context.read<ChordCubit>().state;

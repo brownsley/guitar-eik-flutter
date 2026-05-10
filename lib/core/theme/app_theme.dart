@@ -1,13 +1,13 @@
-import 'package:guitar_eik/core/theme/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guitar_eik/core/theme/extension.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     textTheme: GoogleFonts.padaukTextTheme().copyWith(
-      bodyMedium: const TextStyle(height: 1.8), // Lyrics တွေအတွက် line height
+      bodyMedium: const TextStyle(height: 1.8),
       bodyLarge: const TextStyle(height: 1.8),
       titleMedium: const TextStyle(height: 1.5),
     ),

@@ -118,7 +118,6 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
   Widget _buildAdItem(Map<String, String> data, Color accent) {
     return GestureDetector(
       onTap: () {
-        // Ads link ဆီသို့ သွားရန် code ထည့်နိုင်သည်
         debugPrint("Navigating to: ${data['url']}");
       },
       child: Container(

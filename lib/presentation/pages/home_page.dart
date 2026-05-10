@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guitar_eik/logic/album/album_cubit.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
+import 'package:guitar_eik/logic/favorite/favorite_cubit.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/components/list/artists_list.dart';
-import 'package:guitar_eik/presentation/widgets/components/skeleton/artists_loading.dart';
+import 'package:guitar_eik/presentation/widgets/components/shimmer/albums_page_loading.dart';
+import 'package:guitar_eik/presentation/widgets/components/shimmer/artists_loading.dart';
+import 'package:guitar_eik/presentation/widgets/components/ui/album_pager.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/banner_ads.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/home_hero_ads.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/home_song_list.dart';
 import 'package:guitar_eik/presentation/widgets/components/ui/section_header.dart';
+import 'package:guitar_eik/presentation/widgets/components/ui/song_pager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -58,7 +63,7 @@ class _HomePageState extends State<HomePage> {
               child: BlocBuilder<ArtistCubit, ArtistState>(
                 builder: (context, state) {
                   if (state is ArtistLoading) {
-                    return const Center(child: ArtistListLoading());
+                    return const Center(child: ArtistsListLoading(1));
                   }
                   if (state is ArtistLoaded) {
                     if (state.artists.isEmpty) {
@@ -75,37 +80,74 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            SectionHeader(title: "Top Charts", isDark: isDark),
+
+            BlocBuilder<FavoriteCubit, FavoriteState>(
+              builder: (context, state) {
+                if (state is FavoriteLoaded) {
+                  final songs = state.favoriteSongs;
+
+                  if (songs.isEmpty) {
+                    return SizedBox.shrink();
+                  }
+
+                  return Column(
+                    children: [
+                      SectionHeader(title: "Favorites", isDark: isDark),
+
+                      SongPager(songs: state.favoriteSongs),
+                    ],
+                  );
+                }
+                return SizedBox.shrink();
+              },
+            ),
+            SectionHeader(title: "Top Albums", isDark: isDark),
+
+            BlocBuilder<AlbumCubit, AlbumState>(
+              builder: (context, state) {
+                if (state is AlbumLoading) {
+                  return AlbumPageLoading(2);
+                }
+                if (state is AlbumLoaded) {
+                  final albums = state.albums;
+                  if (albums.isEmpty) {
+                    return SizedBox.shrink();
+                  }
+                  return Column(children: [AlbumPager(albums: albums)]);
+                }
+                return SizedBox.shrink();
+              },
+            ),
+            BannerAds(
+              imageUrl:
+                  "https://mpt-aws-wp-bucket.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2024/01/30104605/Note4U_1400x430.jpg",
+              onTap: () {
+                print("Redeeming 15% Discount...");
+              },
+            ),
+            SectionHeader(title: "RECENT ADD", isDark: isDark),
             const HomeSongList(),
 
-            SectionHeader(title: "New Releases", isDark: isDark),
+            SectionHeader(title: "MOST POPULAR", isDark: isDark),
             const HomeSongList(),
             BannerAds(
-              title: "Special Limited Offer",
-              subtitle: "Get 15% Discount This Month",
               imageUrl:
-                  "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80",
+                  "https://cdn.wavemoney.com.mm/wp-content/uploads/2C2P_Website-Banner_1930x670px-4-scaled.jpg",
               onTap: () {
                 print("Redeeming 15% Discount...");
               },
             ),
             SectionHeader(title: "Trending Now", isDark: isDark),
             const HomeSongList(),
-            SectionHeader(title: "Global Hits", isDark: isDark),
-            const HomeSongList(),
-
             BannerAds(
-              title: "Special Limited Offer",
-              subtitle: "Get 15% Discount This Month",
               imageUrl:
-                  "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80",
+                  "https://mpt-aws-wp-bucket.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2025/07/17171523/A-Kyite-PoeAuto-Renewal_07-1400x430-1.jpg",
               onTap: () {
                 print("Redeeming 15% Discount...");
               },
             ),
-            SectionHeader(title: "Recently Played", isDark: isDark),
+            SectionHeader(title: "Random Pick", isDark: isDark),
             const HomeSongList(),
-            const SizedBox(height: 32),
           ],
         ),
       ),

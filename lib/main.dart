@@ -2,27 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guitar_eik/core/theme/app_theme.dart';
+import 'package:guitar_eik/logic/album/album_cubit.dart';
+import 'package:guitar_eik/logic/album/detail/album_detail_cubit.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
 import 'package:guitar_eik/logic/artist/detail/artist_detail_cubit.dart';
 import 'package:guitar_eik/logic/chord/chord_cubit.dart';
+import 'package:guitar_eik/logic/favorite/favorite_cubit.dart';
 import 'package:guitar_eik/logic/navigation/navigation_cubit.dart';
 import 'package:guitar_eik/logic/search/search_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
 import 'package:guitar_eik/logic/theme/theme_cubit.dart';
+import 'package:guitar_eik/model/song.dart';
+import 'package:guitar_eik/presentation/pages/album_page.dart';
 import 'package:guitar_eik/presentation/pages/artist_page.dart';
 import 'package:guitar_eik/presentation/pages/home_page.dart';
 import 'package:guitar_eik/presentation/pages/search_page.dart';
 import 'package:guitar_eik/presentation/pages/setting_page.dart';
 import 'package:guitar_eik/presentation/pages/song_page.dart';
+import 'package:guitar_eik/presentation/screens/album_detail_screen.dart';
 import 'package:guitar_eik/presentation/screens/artist_detail_screen.dart';
 import 'package:guitar_eik/presentation/screens/chord_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
-  final prefs = SharedPreferencesAsync();
-  final bool savedTheme = await prefs.getBool('isDarkMode') ?? false;
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(SongAdapter());
+
+  await Hive.openBox<Song>("favorite");
+
+  final prefs = await SharedPreferences.getInstance();
+  final bool savedTheme = prefs.getBool('isDarkMode') ?? false;
   runApp(
     MultiBlocProvider(
       providers: [
@@ -32,7 +46,10 @@ Future<void> main() async {
         BlocProvider(create: (create) => SongCubit()),
         BlocProvider(create: (create) => ArtistCubit()),
         BlocProvider(create: (create) => ArtistDetailCubit()),
+        BlocProvider(create: (create) => AlbumDetailCubit()),
         BlocProvider(create: (create) => SearchBloc()),
+        BlocProvider(create: (create) => AlbumCubit()),
+        BlocProvider(create: (create) => FavoriteCubit()),
       ],
       child: const MyApp(),
     ),
@@ -56,6 +73,7 @@ class MyApp extends StatelessWidget {
           routes: {
             "/song": (context) => ChordScreen(),
             "/artist": (context) => ArtistDetailScreen(),
+            "/album": (context) => AlbumDetailScreen(),
             "/search": (context) => SearchPage(),
           },
         );
@@ -71,6 +89,7 @@ class MyHomePage extends StatelessWidget {
   static const List<Widget> _pages = [
     HomePage(),
     SongPage(),
+    AlbumPage(),
     ArtistPage(),
     SettingPage(),
   ];
@@ -83,25 +102,29 @@ class MyHomePage extends StatelessWidget {
       body: IndexedStack(index: currentIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
+        showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: currentIndex,
         onTap: (index) => context.read<NavigationCubit>().changeTab(index),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 30),
+            icon: Icon(Icons.home, size: 32),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.queue_music_outlined, size: 30),
+            icon: Icon(Icons.library_music, size: 32),
             label: "Songs",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 30),
+            icon: Icon(Icons.album, size: 32),
+            label: "Album",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, size: 32),
             label: "Artist",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings, size: 30),
+            icon: Icon(Icons.settings, size: 32),
             label: "Setting",
           ),
         ],

@@ -2,25 +2,21 @@ import 'package:flutter/material.dart';
 
 class SongListItem extends StatelessWidget {
   final String title;
-  final String artist;
+  final List<String> artists;
   final int views;
-  final bool isDark;
   final VoidCallback? onTap;
 
   const SongListItem({
     super.key,
     required this.title,
-    required this.artist,
+    required this.artists,
     required this.views,
-    required this.isDark,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = isDark ? Colors.white : Colors.black;
-    final secondaryColor = isDark ? Colors.white54 : Colors.black54;
-    final accentColor = Colors.deepPurpleAccent;
+    final theme = Theme.of(context);
 
     String formattedViews = views >= 1000000
         ? '${(views / 1000000).toStringAsFixed(1)}M'
@@ -29,92 +25,95 @@ class SongListItem extends StatelessWidget {
         : views.toString();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF121212) : Colors.white,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: isDark ? Colors.white12 : Colors.black12),
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+            width: 1,
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 55,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: accentColor.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(10),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 12.0,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.music_note_rounded,
+                    color: theme.colorScheme.primary,
+                    size: 30,
+                  ),
                 ),
-                child: Icon(
-                  Icons.music_note_rounded,
-                  color: accentColor,
-                  size: 25,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        artists.isNotEmpty ? artists.join(", ") : "Unknown",
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant.withOpacity(
+                            0.7,
+                          ),
+                          fontSize: 13,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-
-              const SizedBox(width: 12),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: primaryColor,
+                      formattedViews,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      artist,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 13, color: secondaryColor),
+                      "VIEWS",
+                      style: TextStyle(
+                        fontSize: 9,
+                        letterSpacing: 0.5,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.primary.withOpacity(0.8),
+                      ),
                     ),
                   ],
                 ),
-              ),
-
-              const SizedBox(width: 12),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    formattedViews,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor,
-                    ),
-                  ),
-                  Text(
-                    "VIEWS",
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: accentColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(width: 12),
-
-              Icon(
-                Icons.chevron_right_rounded,
-                color: secondaryColor,
-                size: 24,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

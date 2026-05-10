@@ -10,7 +10,8 @@ class SearchLoading extends SearchState {}
 class SearchSuccess extends SearchState {
   final List<Artist> artists;
   final List<Song> songs;
-  SearchSuccess(this.artists, this.songs);
+  final List<Album> albums;
+  SearchSuccess(this.artists, this.songs, this.albums);
 }
 
 class SearchError extends SearchState {
