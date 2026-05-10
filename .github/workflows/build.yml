@@ -27,8 +27,11 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Create .env file from Secret
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Build Release APK
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Create or Update Release
         uses: softprops/action-gh-release@v2
