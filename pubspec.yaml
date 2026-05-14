@@ -26,12 +26,22 @@ dependencies:
   lottie: ^3.3.3
   dio: ^5.9.2
   flutter_skeleton_ui: ^0.0.6
-  flutter_native_splash: ^2.4.0
+  flutter_native_splash: ^2.4.7
+  connectivity_plus: ^7.1.1
 
 flutter_native_splash:
-  color: "#F54927"
+  color: "#A3A3A3"
+  image: assets/images/logo.png
+  color_dark: "#121212"
+  image_dark: assets/images/logo_dark.png
+
   android_12:
-    color: "#F54927"
+    color: "#A3A3A3"
+    image: assets/images/logo.png
+
+    color_dark: "#121212"
+    image_dark: assets/images/logo_dark.png
+  fullscreen: true
 
 dev_dependencies:
   flutter_test:
