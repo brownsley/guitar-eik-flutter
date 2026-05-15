@@ -5,22 +5,18 @@ class EmptyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final Color iconColor = isDark ? Colors.grey[600]! : Colors.grey[400]!;
-    final Color mainTextColor = isDark ? Colors.grey[300]! : Colors.grey[800]!;
-    final Color subTextColor = isDark ? Colors.grey[500]! : Colors.grey[500]!;
-    final Color scaffoldBg = isDark ? const Color(0xFF121212) : Colors.white;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: scaffoldBg,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: mainTextColor,
+            color: colorScheme.onSurface,
             size: 20,
           ),
           onPressed: () => Navigator.pop(context),
@@ -32,16 +28,19 @@ class EmptyPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off_rounded, size: 100, color: iconColor),
+            Icon(
+              Icons.search_off_rounded,
+              size: 100,
+              color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ),
             const SizedBox(height: 10),
 
             Text(
               "No Results",
-              style: TextStyle(
+              style: theme.textTheme.titleLarge?.copyWith(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
-                color: mainTextColor,
-                letterSpacing: 0.5,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 10),
@@ -49,7 +48,10 @@ class EmptyPage extends StatelessWidget {
             Text(
               "We couldn't find any matching songs, artists, or albums for your search.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15, color: subTextColor, height: 1.4),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                height: 1.4,
+              ),
             ),
 
             const SizedBox(height: 150),

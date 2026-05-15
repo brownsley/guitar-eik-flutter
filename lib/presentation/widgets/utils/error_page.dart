@@ -7,9 +7,11 @@ class ErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: isDarkMode ? const Color(0xFF121212) : Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -21,15 +23,13 @@ class ErrorPage extends StatelessWidget {
                   height: 130,
                   width: 130,
                   decoration: BoxDecoration(
-                    color: isDarkMode
-                        ? Colors.white.withOpacity(.3)
-                        : Colors.black87.withOpacity(.3),
+                    color: colorScheme.onSurface.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.wifi_off_rounded,
                     size: 70,
-                    color: isDarkMode ? Colors.white : Colors.black87,
+                    color: colorScheme.onSurface,
                   ),
                 ),
 
@@ -37,10 +37,9 @@ class ErrorPage extends StatelessWidget {
 
                 Text(
                   "No Internet Connection",
-                  style: TextStyle(
-                    fontSize: 24,
+                  style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isDarkMode ? Colors.white : Colors.black87,
+                    color: colorScheme.onSurface,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -50,10 +49,9 @@ class ErrorPage extends StatelessWidget {
                 Text(
                   "Your device is currently offline.\nPlease check your internet connection and try again.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
                     height: 1.6,
-                    color: isDarkMode ? Colors.white : Colors.black87,
                   ),
                 ),
 
@@ -65,23 +63,25 @@ class ErrorPage extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed:
                         onRetry ??
-                        () {
-                          Navigator.pushReplacementNamed(context, '/');
-                        },
+                        () => Navigator.pushReplacementNamed(context, '/'),
                     icon: const Icon(Icons.refresh_rounded),
                     label: const Text(
                       "Try Again",
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff2563EB),
-                      foregroundColor: Colors.white,
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: colorScheme.onSurface.withOpacity(0.1),
+                          width: 1,
+                        ),
                       ),
                     ),
                   ),

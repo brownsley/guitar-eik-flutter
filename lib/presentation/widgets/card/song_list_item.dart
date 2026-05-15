@@ -17,6 +17,7 @@ class SongListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     String formattedViews = views >= 1000000
         ? '${(views / 1000000).toStringAsFixed(1)}M'
@@ -28,20 +29,15 @@ class SongListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
       child: Container(
         decoration: BoxDecoration(
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: theme.colorScheme.outlineVariant.withOpacity(0.5),
-            width: 1,
-          ),
+          border: Border.all(color: colorScheme.outlineVariant),
         ),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-              horizontal: 12.0,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -49,12 +45,12 @@ class SongListItem extends StatelessWidget {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primaryContainer.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(12),
+                    color: colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(7),
                   ),
                   child: Icon(
                     Icons.music_note_rounded,
-                    color: theme.colorScheme.primary,
+                    color: colorScheme.primary,
                     size: 30,
                   ),
                 ),
@@ -69,6 +65,7 @@ class SongListItem extends StatelessWidget {
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                          color: colorScheme.onSurface,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -77,9 +74,7 @@ class SongListItem extends StatelessWidget {
                       Text(
                         artists.isNotEmpty ? artists.join(", ") : "Unknown",
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant.withOpacity(
-                            0.7,
-                          ),
+                          color: colorScheme.onSurfaceVariant,
                           fontSize: 13,
                         ),
                         maxLines: 1,
@@ -98,6 +93,7 @@ class SongListItem extends StatelessWidget {
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -107,7 +103,7 @@ class SongListItem extends StatelessWidget {
                         fontSize: 9,
                         letterSpacing: 0.5,
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.primary.withOpacity(0.8),
+                        color: colorScheme.primary,
                       ),
                     ),
                   ],

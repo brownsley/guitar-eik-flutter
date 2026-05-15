@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/artist_card.dart';
-import 'package:guitar_eik/presentation/widgets/components/shimmer/artists_loading.dart';
+import 'package:guitar_eik/presentation/widgets/card/artist_card.dart';
+import 'package:guitar_eik/presentation/widgets/shimmer/artists_loading.dart';
 
 class ArtistPage extends StatefulWidget {
   const ArtistPage({super.key});

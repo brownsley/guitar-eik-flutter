@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/shimmer/song_page_loading.dart';
-import 'package:guitar_eik/presentation/widgets/components/ui/song_pager.dart';
+import 'package:guitar_eik/presentation/widgets/shimmer/song_page_loading.dart';
+import 'package:guitar_eik/presentation/widgets/ui/song_pager.dart';
 
 class HomeSongList extends StatefulWidget {
   const HomeSongList({super.key});

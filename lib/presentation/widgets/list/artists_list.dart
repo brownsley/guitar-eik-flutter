@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guitar_eik/model/artist_model.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/artist_card.dart';
+import 'package:guitar_eik/presentation/widgets/card/artist_card.dart';
 
 class ArtistHorizontalList extends StatelessWidget {
   final List<Artist> artists;

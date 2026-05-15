@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
-  final bool isDark;
 
-  const SectionHeader({super.key, required this.title, required this.isDark});
+  const SectionHeader({super.key, required this.title, required bool isDark});
 
   @override
   Widget build(BuildContext context) {
-    const Color accentColor = Color(0xFFFF007F);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
@@ -18,17 +18,17 @@ class SectionHeader extends StatelessWidget {
             width: 4,
             height: 20,
             decoration: BoxDecoration(
-              color: accentColor,
+              color: colorScheme.primary,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
           const SizedBox(width: 12),
           Text(
             title.toUpperCase(),
-            style: TextStyle(
+            style: theme.textTheme.titleLarge?.copyWith(
               fontSize: 18,
               fontWeight: FontWeight.w900,
-              color: isDark ? Colors.white : Colors.black,
+              color: colorScheme.onSurface,
               letterSpacing: -0.5,
             ),
           ),

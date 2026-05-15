@@ -1,220 +1,129 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/theme/theme_cubit.dart';
+import 'package:guitar_eik/presentation/widgets/setting_group.dart';
+import 'package:guitar_eik/presentation/widgets/setting_header.dart';
+import 'package:guitar_eik/presentation/widgets/setting_item.dart';
+import 'package:guitar_eik/presentation/widgets/utils/form_dailog.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const Color accentColor = Colors.deepPurpleAccent;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     final bool isDarkMode = context.watch<ThemeCubit>().state;
 
     return Scaffold(
-      backgroundColor: isDarkMode
-          ? const Color(0xFF121212)
-          : const Color(0xFFF5F7FA),
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text(
           "SETTING",
-          style: TextStyle(
+          style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w900,
             letterSpacing: 2,
             fontSize: 16,
+            color: colorScheme.onSurface,
           ),
         ),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionTitle("PREFERENCES"),
-              _buildSettingsGroup(isDarkMode, [
-                _buildSettingTile(
-                  isDarkMode: isDarkMode,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SettingHeader(title: "PREFERENCES"),
+            SettingGroup(
+              items: [
+                SettingItem(
+                  title: "Dark Mode",
                   icon: isDarkMode
                       ? Icons.dark_mode_rounded
                       : Icons.light_mode_rounded,
-                  title: "Dark Mode",
                   trailing: Switch.adaptive(
-                    activeColor: accentColor,
+                    activeColor: colorScheme.primary,
                     value: isDarkMode,
                     onChanged: (val) =>
                         context.read<ThemeCubit>().toggleTheme(),
                   ),
                 ),
-              ]),
+              ],
+            ),
 
-              _buildSectionTitle("MUSIC FEATURES"),
-              _buildSettingsGroup(isDarkMode, [
-                _buildSettingTile(
-                  icon: Icons.music_note_rounded,
+            const SettingHeader(title: "MUSIC FEATURES"),
+            SettingGroup(
+              items: [
+                SettingItem(
                   title: "Request a Song",
-                  isDarkMode: isDarkMode,
-                  onTap: () {},
+                  icon: Icons.music_note_rounded,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => FormDailog(
+                        title: "Request Song",
+                        subjectLabel: "Song Name",
+                        descLabel: "Artist Name",
+                        onSubmit: () {},
+                      ),
+                    );
+                  },
                 ),
-              ]),
+              ],
+            ),
 
-              _buildSectionTitle("SUPPORT & FEEDBACK"),
-              _buildSettingsGroup(isDarkMode, [
-                _buildSettingTile(
-                  icon: Icons.coffee_rounded,
+            const SettingHeader(title: "SUPPORT & FEEDBACK"),
+            SettingGroup(
+              items: [
+                SettingItem(
                   title: "Buy me a coffee",
-                  isDarkMode: isDarkMode,
+                  icon: Icons.coffee_rounded,
                   onTap: () {},
                 ),
-                _buildDivider(isDarkMode),
-                _buildSettingTile(
-                  icon: Icons.feedback_outlined,
+                SettingItem(
                   title: "Send Feedback",
-                  isDarkMode: isDarkMode,
+                  icon: Icons.feedback_outlined,
                   onTap: () {},
+                  showDivider: false,
                 ),
-              ]),
+              ],
+            ),
 
-              _buildSectionTitle("ABOUT"),
-              _buildSettingsGroup(isDarkMode, [
-                _buildSettingTile(
-                  icon: Icons.privacy_tip_outlined,
+            const SettingHeader(title: "ABOUT"),
+            SettingGroup(
+              items: [
+                SettingItem(
                   title: "Privacy Policy",
-                  isDarkMode: isDarkMode,
+                  icon: Icons.privacy_tip_outlined,
                   onTap: () {},
                 ),
-                _buildDivider(isDarkMode),
-                _buildSettingTile(
-                  isDarkMode: isDarkMode,
-                  icon: Icons.info_outline,
+                SettingItem(
+                  title: "Terms of Service",
+                  icon: Icons.description_outlined,
+                  onTap: () {},
+                ),
+                SettingItem(
                   title: "App Version",
-                  trailing: const Text(
+                  icon: Icons.info_outline,
+                  showDivider: false,
+                  trailing: Text(
                     "1.0.0 (Beta)",
-                    style: TextStyle(
-                      color: Colors.grey,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14,
                     ),
                   ),
                 ),
-              ]),
-
-              const SizedBox(height: 50),
-              _buildFooter(accentColor),
-              const SizedBox(height: 30),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSettingsGroup(bool isDarkMode, List<Widget> children) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDarkMode
-              ? Colors.white.withOpacity(0.05)
-              : Colors.black.withOpacity(0.05),
-        ),
-      ),
-      child: Column(children: children),
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 24, 0, 10),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.deepPurpleAccent,
-          fontWeight: FontWeight.w900,
-          fontSize: 13,
-          letterSpacing: 1.2,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSettingTile({
-    required IconData icon,
-    required String title,
-    required bool isDarkMode,
-    Widget? trailing,
-    VoidCallback? onTap,
-  }) {
-    return ListTile(
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      leading: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.deepPurpleAccent.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(icon, color: Colors.deepPurpleAccent, size: 24),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-          color: isDarkMode ? Colors.white : Colors.black87,
-        ),
-      ),
-      trailing:
-          trailing ??
-          const Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: Colors.grey,
-            size: 16,
-          ),
-    );
-  }
-
-  Widget _buildDivider(bool isDarkMode) {
-    return Divider(
-      height: 1,
-      indent: 65,
-      endIndent: 20,
-      color: isDarkMode
-          ? Colors.white.withOpacity(0.1)
-          : Colors.black.withOpacity(0.05),
-    );
-  }
-
-  Widget _buildFooter(Color accentColor) {
-    return Center(
-      child: Column(
-        children: [
-          const Text(
-            "Made with ❤️ in Myanmar",
-            style: TextStyle(color: Colors.grey, fontSize: 12),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            decoration: BoxDecoration(
-              color: accentColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
+              ],
             ),
-            child: Text(
-              "BROWNSLEY HEIM",
-              style: TextStyle(
-                color: accentColor,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 2,
-                fontSize: 10,
-              ),
-            ),
-          ),
-        ],
+
+            const SizedBox(height: 30),
+          ],
+        ),
       ),
     );
   }
