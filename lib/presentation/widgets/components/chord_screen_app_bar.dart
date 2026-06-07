@@ -4,12 +4,14 @@ import 'package:guitar_eik/logic/chord/chord_cubit.dart';
 import 'package:guitar_eik/logic/favorite/favorite_cubit.dart';
 import 'package:guitar_eik/model/song.dart';
 import 'package:guitar_eik/presentation/widgets/utils/form_dailog.dart';
+import 'package:guitar_eik/service/support_service.dart';
 
 import 'setup_box.dart';
 
 class ChordScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ChordScreenAppBar({super.key});
+  ChordScreenAppBar({super.key});
 
+  final SupportService supportService = SupportService();
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -63,7 +65,18 @@ class ChordScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                     title: "Testing TItle",
                     subjectLabel: "Sub Label",
                     descLabel: "Desc Lable",
-                    onSubmit: () {},
+                    onSubmit: (title, desc) async {
+                      try {
+                        await supportService.createReport(
+                          songId: state.song.id,
+                          subject: title,
+                          description: desc,
+                        );
+                        print('Report Success');
+                      } catch (e) {
+                        print(e.toString());
+                      }
+                    },
                   );
                 },
               );

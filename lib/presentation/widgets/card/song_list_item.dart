@@ -45,7 +45,7 @@ class SongListItem extends StatelessWidget {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: colorScheme.primaryContainer,
+                    color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: Icon(

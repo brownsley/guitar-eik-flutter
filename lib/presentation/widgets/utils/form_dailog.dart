@@ -4,7 +4,7 @@ class FormDailog extends StatelessWidget {
   final String title;
   final String subjectLabel;
   final String descLabel;
-  final VoidCallback? onSubmit;
+  final Function(String title, String description)? onSubmit;
 
   const FormDailog({
     super.key,
@@ -18,7 +18,8 @@ class FormDailog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController descriptionController = TextEditingController();
     return Dialog(
       backgroundColor: colorScheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -47,9 +48,19 @@ class FormDailog extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            _buildTextField(context, label: subjectLabel, maxLines: 1),
+            _buildTextField(
+              context,
+              label: subjectLabel,
+              maxLines: 1,
+              controller: titleController,
+            ),
             const SizedBox(height: 16),
-            _buildTextField(context, label: descLabel, maxLines: 4),
+            _buildTextField(
+              context,
+              label: descLabel,
+              maxLines: 4,
+              controller: descriptionController,
+            ),
 
             const SizedBox(height: 24),
 
@@ -74,7 +85,12 @@ class FormDailog extends StatelessWidget {
 
                 ElevatedButton(
                   onPressed: () {
-                    if (onSubmit != null) onSubmit!();
+                    if (onSubmit != null) {
+                      onSubmit!(
+                        titleController.text,
+                        descriptionController.text,
+                      );
+                    }
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
@@ -106,11 +122,13 @@ class FormDailog extends StatelessWidget {
     BuildContext context, {
     required String label,
     required int maxLines,
+    required TextEditingController controller,
   }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return TextField(
+      controller: controller,
       maxLines: maxLines,
       style: theme.textTheme.bodyLarge,
       decoration: InputDecoration(

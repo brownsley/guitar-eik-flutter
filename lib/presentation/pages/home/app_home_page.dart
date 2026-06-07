@@ -11,7 +11,7 @@ class AppHomePage extends StatelessWidget {
   const AppHomePage({super.key, required this.title});
   final String title;
 
-  static const List<Widget> _pages = [
+  static final List<Widget> _pages = [
     HomePage(),
     SongPage(),
     AlbumPage(),

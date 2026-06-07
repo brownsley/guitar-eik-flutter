@@ -5,9 +5,12 @@ import 'package:guitar_eik/presentation/widgets/setting_group.dart';
 import 'package:guitar_eik/presentation/widgets/setting_header.dart';
 import 'package:guitar_eik/presentation/widgets/setting_item.dart';
 import 'package:guitar_eik/presentation/widgets/utils/form_dailog.dart';
+import 'package:guitar_eik/service/support_service.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({super.key});
+  SettingPage({super.key});
+
+  final SupportService supportService = SupportService();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +71,12 @@ class SettingPage extends StatelessWidget {
                         title: "Request Song",
                         subjectLabel: "Song Name",
                         descLabel: "Artist Name",
-                        onSubmit: () {},
+                        onSubmit: (title, artist) {
+                          supportService.createRequest(
+                            title: title,
+                            artist: artist,
+                          );
+                        },
                       ),
                     );
                   },
@@ -87,7 +95,22 @@ class SettingPage extends StatelessWidget {
                 SettingItem(
                   title: "Send Feedback",
                   icon: Icons.feedback_outlined,
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => FormDailog(
+                        title: "Feedback",
+                        subjectLabel: "Title",
+                        descLabel: "Description",
+                        onSubmit: (subject, description) {
+                          supportService.createSuggestion(
+                            subject: subject,
+                            description: description,
+                          );
+                        },
+                      ),
+                    );
+                  },
                   showDivider: false,
                 ),
               ],
