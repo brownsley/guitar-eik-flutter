@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/search/search_bloc.dart';
 import 'package:guitar_eik/logic/theme/theme_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
-import 'package:guitar_eik/presentation/widgets/components/list/artists_list.dart';
+import 'package:guitar_eik/presentation/widgets/card/album_card.dart';
+import 'package:guitar_eik/presentation/widgets/card/song_list_item.dart';
+import 'package:guitar_eik/presentation/widgets/list/artists_list.dart';
 import 'package:guitar_eik/presentation/widgets/utils/empty_page.dart';
 
 class SearchPage extends StatefulWidget {

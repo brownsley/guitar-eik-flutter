@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
+import 'package:guitar_eik/presentation/widgets/card/song_list_item.dart';
 
 class SongPager extends StatefulWidget {
   final List songs;

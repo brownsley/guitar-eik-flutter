@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guitar_eik/logic/theme/theme_cubit.dart';
 
 class ArtistCard extends StatelessWidget {
   final String artistName;
@@ -20,21 +18,13 @@ class ArtistCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = context.read<ThemeCubit>().state;
 
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.5)),
-        boxShadow: [
-          if (!isDark)
-            BoxShadow(
-              color: Colors.black.withOpacity(0.03),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-        ],
+        border: Border.all(color: colorScheme.outlineVariant),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -52,29 +42,13 @@ class ArtistCard extends StatelessWidget {
                       Image.network(imageUrl!, fit: BoxFit.cover)
                     else
                       Container(
-                        color: isDark
-                            ? const Color(0xFF1E1E1E)
-                            : Colors.grey[100],
+                        color: colorScheme.surfaceContainerHighest,
                         child: Icon(
                           Icons.person,
                           size: 45,
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            isDark
-                                ? Colors.black45
-                                : Colors.black.withOpacity(0.05),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -87,6 +61,7 @@ class ArtistCard extends StatelessWidget {
                       artistName,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w900,
+                        color: colorScheme.onSurface,
                         letterSpacing: -0.4,
                       ),
                       maxLines: 1,

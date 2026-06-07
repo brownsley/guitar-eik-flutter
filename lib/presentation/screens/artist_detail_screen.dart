@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/artist/detail/artist_detail_cubit.dart';
-import 'package:guitar_eik/logic/theme/theme_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
+import 'package:guitar_eik/presentation/widgets/card/album_card.dart';
+import 'package:guitar_eik/presentation/widgets/card/song_list_item.dart';
 import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
 
 class ArtistDetailScreen extends StatefulWidget {
@@ -29,13 +28,11 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.watch<ThemeCubit>().state;
-
-    final bgColor = isDark ? Colors.black : Colors.white;
-    final textColor = isDark ? Colors.white : Colors.black;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: colorScheme.surface,
 
       body: SafeArea(
         child: BlocBuilder<ArtistDetailCubit, ArtistDetailState>(
@@ -48,7 +45,9 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
               return Center(
                 child: Text(
                   "Connection Error",
-                  style: TextStyle(color: textColor),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               );
             }
@@ -72,10 +71,9 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         artist.name,
-                        style: TextStyle(
-                          fontSize: 26,
+                        style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: textColor,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -86,19 +84,20 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         "${artist.totalTrack} Tracks",
-                        style: TextStyle(color: Colors.grey),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
 
                     if (artist.albums.isNotEmpty) ...[
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           "Albums",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -118,7 +117,6 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                               child: AlbumCard(
                                 albumTitle: album.name,
                                 coverUrl: album.cover,
-
                                 onTap: () => Navigator.pushNamed(
                                   context,
                                   "/album",
@@ -136,10 +134,8 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         "Songs",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ),

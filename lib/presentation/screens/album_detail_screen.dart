@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/album/detail/album_detail_cubit.dart';
-import 'package:guitar_eik/logic/theme/theme_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/song_list_item.dart';
+import 'package:guitar_eik/presentation/widgets/card/song_list_item.dart';
 import 'package:guitar_eik/presentation/widgets/utils/loading_view.dart';
 
 class AlbumDetailScreen extends StatefulWidget {
@@ -28,13 +27,11 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.watch<ThemeCubit>().state;
-
-    final backgroundColor = isDark ? Colors.black : Colors.white;
-    final textColor = isDark ? Colors.white : Colors.black;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: colorScheme.surface,
 
       body: BlocBuilder<AlbumDetailCubit, AlbumDetailState>(
         builder: (context, state) {
@@ -44,7 +41,12 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 
           if (state is AlbumDetailError) {
             return Center(
-              child: Text(state.message, style: TextStyle(color: textColor)),
+              child: Text(
+                state.message,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurface,
+                ),
+              ),
             );
           }
 
@@ -67,23 +69,21 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                       left: 10,
                       child: IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.arrow_back,
-                          color: Color.fromARGB(255, 6, 0, 0),
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ),
                   ],
                 ),
-                // SizedBox(
-                //   height: 250,
-                //   child: ArtistHorizontalList(artists: state.album.artists),
-                // ),
+
                 Expanded(
                   child: Container(
-                    color: backgroundColor,
+                    color: colorScheme.surface,
                     child: ListView.builder(
                       itemCount: songs.length,
+                      padding: EdgeInsets.zero,
                       itemBuilder: (context, index) {
                         final song = songs[index];
 

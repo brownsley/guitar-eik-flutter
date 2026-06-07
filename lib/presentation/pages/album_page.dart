@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/logic/album/album_cubit.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
-import 'package:guitar_eik/presentation/widgets/components/shimmer/albums_page_loading.dart';
+import 'package:guitar_eik/presentation/widgets/card/album_card.dart';
+import 'package:guitar_eik/presentation/widgets/shimmer/albums_page_loading.dart';
 
 class AlbumPage extends StatefulWidget {
   const AlbumPage({super.key});

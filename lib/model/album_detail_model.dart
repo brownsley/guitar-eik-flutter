@@ -5,6 +5,7 @@ class AlbumDetail {
   final int id;
   final String name;
   final String cover;
+  final int totalSongs;
   final List<Artist> artists;
   final List<Song> songs;
 
@@ -12,6 +13,7 @@ class AlbumDetail {
     required this.id,
     required this.name,
     required this.cover,
+    required this.totalSongs,
     required this.artists,
     required this.songs,
   });
@@ -20,6 +22,7 @@ class AlbumDetail {
     id: json["id"] ?? 0,
     name: json["name"] ?? "Unknown Album",
     cover: json["cover"] ?? "",
+    totalSongs: json["totalSongs"] ?? "",
     artists: json["artists"] == null
         ? []
         : List<Artist>.from(json["artists"].map((x) => Artist.fromJson(x))),

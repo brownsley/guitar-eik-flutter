@@ -48,7 +48,7 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       if (_currentPage < adData.length - 1) {
         _currentPage++;
       } else {
@@ -58,7 +58,7 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
       if (_pageController.hasClients) {
         _pageController.animateToPage(
           _currentPage,
-          duration: const Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       }
@@ -74,7 +74,8 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
 
   @override
   Widget build(BuildContext context) {
-    const Color accentColor = Colors.deepPurpleAccent;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Column(
       children: [
@@ -87,12 +88,11 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
             },
             itemCount: adData.length,
             itemBuilder: (context, index) {
-              return _buildAdItem(adData[index], accentColor);
+              return _buildAdItem(adData[index], colorScheme);
             },
           ),
         ),
-        const SizedBox(height: 10),
-        // Dots Indicator
+        const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
@@ -104,8 +104,8 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
               width: _currentPage == index ? 20 : 6,
               decoration: BoxDecoration(
                 color: _currentPage == index
-                    ? accentColor
-                    : Colors.grey.withOpacity(0.3),
+                    ? colorScheme.primary
+                    : colorScheme.outlineVariant,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -115,36 +115,34 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
     );
   }
 
-  Widget _buildAdItem(Map<String, String> data, Color accent) {
+  Widget _buildAdItem(Map<String, String> data, ColorScheme colorScheme) {
     return GestureDetector(
-      onTap: () {
-        debugPrint("Navigating to: ${data['url']}");
-      },
+      onTap: () => debugPrint("Navigating to: ${data['url']}"),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
+          color: colorScheme.surfaceContainerHighest,
           image: DecorationImage(
             image: NetworkImage(data['image']!),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.35),
+              Colors.black.withOpacity(0.4),
               BlendMode.darken,
             ),
           ),
         ),
         child: Stack(
           children: [
-            // AD label tag
-            PositionImage(
+            Positioned(
               top: 12,
               right: 12,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.white24),
+                  color: Colors.black45,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: Colors.white10),
                 ),
                 child: const Text(
                   "SPONSORED",
@@ -152,11 +150,11 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
                     color: Colors.white,
                     fontSize: 8,
                     fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ),
             ),
-            // Ad content
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -169,26 +167,27 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: accent,
-                      borderRadius: BorderRadius.circular(4),
+                      color: colorScheme.primary,
+                      borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       data['title']!,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: colorScheme.onPrimary,
                         fontSize: 10,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.5,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 8),
                   Text(
                     data['subtitle']!,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.w800,
+                      height: 1.1,
                     ),
                   ),
                 ],
@@ -199,14 +198,4 @@ class _HomeHeroAdsState extends State<HomeHeroAds> {
       ),
     );
   }
-}
-
-// Helper for AD Tag position
-class PositionImage extends StatelessWidget {
-  final double? top, right;
-  final Widget child;
-  const PositionImage({super.key, this.top, this.right, required this.child});
-  @override
-  Widget build(BuildContext context) =>
-      Positioned(top: top, right: right, child: child);
 }

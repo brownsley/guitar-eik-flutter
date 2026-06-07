@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guitar_eik/presentation/widgets/components/card/album_card.dart';
+import 'package:guitar_eik/presentation/widgets/card/album_card.dart';
 
 class AlbumPager extends StatefulWidget {
   final List albums;

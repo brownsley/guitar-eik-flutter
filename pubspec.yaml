@@ -15,10 +15,10 @@ dependencies:
   hive_flutter: ^1.1.0
   shimmer: ^3.0.0
   rxdart: ^0.28.0
-  flutter_dotenv: ^5.1.0
+  flutter_dotenv: ^6.0.1
   faker: ^2.1.0
   cupertino_icons: ^1.0.8
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.1.1
   shared_preferences: ^2.5.5
   flutter_chord: ^0.1.2
   flutter_guitar_tabs: ^0.0.10
@@ -26,12 +26,18 @@ dependencies:
   lottie: ^3.3.3
   dio: ^5.9.2
   flutter_skeleton_ui: ^0.0.6
-  flutter_native_splash: ^2.4.0
+  flutter_native_splash: ^2.4.7
+  connectivity_plus: ^7.1.1
 
 flutter_native_splash:
-  color: "#F54927"
+  color: "#A3A3A3"
+  image: assets/images/logo.png
+
   android_12:
-    color: "#F54927"
+    color: "#A3A3A3"
+    image: assets/images/logo.png
+
+  fullscreen: true
 
 dev_dependencies:
   flutter_test:

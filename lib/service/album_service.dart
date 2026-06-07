@@ -1,16 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guitar_eik/model/album_detail_model.dart';
 import 'package:guitar_eik/model/album_model.dart';
+import 'package:guitar_eik/service/dio_service.dart';
 
 class AlbumService {
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: dotenv.get("API_URL"),
-      connectTimeout: const Duration(seconds: 60),
-      receiveTimeout: const Duration(seconds: 60),
-    ),
-  );
+  final Dio _dio = DioClient().dio;
 
   Future<Map<String, dynamic>> getAllAlbum({int page = 0}) async {
     try {

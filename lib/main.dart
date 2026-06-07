@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:guitar_eik/core/theme/app_theme.dart';
+import 'package:guitar_eik/app.dart';
 import 'package:guitar_eik/logic/album/album_cubit.dart';
 import 'package:guitar_eik/logic/album/detail/album_detail_cubit.dart';
 import 'package:guitar_eik/logic/artist/artist_cubit.dart';
@@ -13,15 +13,6 @@ import 'package:guitar_eik/logic/search/search_bloc.dart';
 import 'package:guitar_eik/logic/song/song_cubit.dart';
 import 'package:guitar_eik/logic/theme/theme_cubit.dart';
 import 'package:guitar_eik/model/song.dart';
-import 'package:guitar_eik/presentation/pages/album_page.dart';
-import 'package:guitar_eik/presentation/pages/artist_page.dart';
-import 'package:guitar_eik/presentation/pages/home_page.dart';
-import 'package:guitar_eik/presentation/pages/search_page.dart';
-import 'package:guitar_eik/presentation/pages/setting_page.dart';
-import 'package:guitar_eik/presentation/pages/song_page.dart';
-import 'package:guitar_eik/presentation/screens/album_detail_screen.dart';
-import 'package:guitar_eik/presentation/screens/artist_detail_screen.dart';
-import 'package:guitar_eik/presentation/screens/chord_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,103 +23,26 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(SongAdapter());
-
   await Hive.openBox<Song>("favorite");
 
   final prefs = await SharedPreferences.getInstance();
   final bool savedTheme = prefs.getBool('isDarkMode') ?? false;
+
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ThemeCubit(savedTheme)),
         BlocProvider(create: (context) => NavigationCubit()),
-        BlocProvider(create: (create) => ChordCubit()),
-        BlocProvider(create: (create) => SongCubit()),
-        BlocProvider(create: (create) => ArtistCubit()),
-        BlocProvider(create: (create) => ArtistDetailCubit()),
-        BlocProvider(create: (create) => AlbumDetailCubit()),
-        BlocProvider(create: (create) => SearchBloc()),
-        BlocProvider(create: (create) => AlbumCubit()),
-        BlocProvider(create: (create) => FavoriteCubit()),
+        BlocProvider(create: (context) => ChordCubit()),
+        BlocProvider(create: (context) => SongCubit()),
+        BlocProvider(create: (context) => ArtistCubit()),
+        BlocProvider(create: (context) => ArtistDetailCubit()),
+        BlocProvider(create: (context) => AlbumDetailCubit()),
+        BlocProvider(create: (context) => SearchBloc()),
+        BlocProvider(create: (context) => AlbumCubit()),
+        BlocProvider(create: (context) => FavoriteCubit()),
       ],
       child: const MyApp(),
     ),
   );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, bool>(
-      builder: (context, state) {
-        return MaterialApp(
-          title: "Testing AOI",
-          debugShowCheckedModeBanner: false,
-
-          theme: state ? AppTheme.darkTheme : AppTheme.lightTheme,
-
-          home: const MyHomePage(title: 'Testing AOI'),
-          routes: {
-            "/song": (context) => ChordScreen(),
-            "/artist": (context) => ArtistDetailScreen(),
-            "/album": (context) => AlbumDetailScreen(),
-            "/search": (context) => SearchPage(),
-          },
-        );
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  static const List<Widget> _pages = [
-    HomePage(),
-    SongPage(),
-    AlbumPage(),
-    ArtistPage(),
-    SettingPage(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final int currentIndex = context.watch<NavigationCubit>().state;
-
-    return Scaffold(
-      body: IndexedStack(index: currentIndex, children: _pages),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        currentIndex: currentIndex,
-        onTap: (index) => context.read<NavigationCubit>().changeTab(index),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 32),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_music, size: 32),
-            label: "Songs",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.album, size: 32),
-            label: "Album",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 32),
-            label: "Artist",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings, size: 32),
-            label: "Setting",
-          ),
-        ],
-      ),
-    );
-  }
 }

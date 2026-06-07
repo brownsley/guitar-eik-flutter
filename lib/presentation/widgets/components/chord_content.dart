@@ -39,68 +39,62 @@ class ChordContent extends StatelessWidget {
             },
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {
+              onTapDown: (_) {
                 context.read<ChordCubit>().toggleScroll();
               },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: LyricsRenderer(
-                  leadingWidget: Column(
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            state.song.title,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 18,
-                            ),
+              child: LyricsRenderer(
+                leadingWidget: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          state.song.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18,
                           ),
-                          const SizedBox(width: 10),
+                        ),
+                        const SizedBox(width: 10),
 
-                          const SizedBox(width: 10),
-                          Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 5),
-                                width: 4,
-                                height: 20,
-                                color: Colors.deepPurpleAccent,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  (state.song.artists != null &&
-                                          state.song.artists!.isNotEmpty)
-                                      ? state.song.artists!.join(", ")
-                                      : "Unknown",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
+                        const SizedBox(width: 10),
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 5),
+                              width: 4,
+                              height: 20,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                            Expanded(
+                              child: Text(
+                                (state.song.artists != null &&
+                                        state.song.artists!.isNotEmpty)
+                                    ? state.song.artists!.join(", ")
+                                    : "Unknown",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 80),
-                    ],
-                  ),
-                  lyrics: state.song.lyric!,
-                  textStyle: TextStyle(
-                    color: myColors.lyricColor,
-                    fontSize: 15,
-                  ),
-                  chordStyle: const TextStyle(
-                    color: Colors.deepPurpleAccent,
-                    fontSize: 15,
-                  ),
-                  onTapChord: () {},
-                  transposeIncrement: state.transpose,
-                  scrollSpeed: state.isScrolling ? state.speed : 0,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 80),
+                  ],
                 ),
+                lyrics: state.song.lyric!,
+                textStyle: TextStyle(color: myColors.lyricColor, fontSize: 15),
+                chordStyle: const TextStyle(
+                  color: Colors.deepPurpleAccent,
+                  fontSize: 15,
+                ),
+                onTapChord: () {},
+                transposeIncrement: state.transpose,
+                scrollSpeed: state.isScrolling ? state.speed : 0,
               ),
             ),
           ),

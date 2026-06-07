@@ -24,7 +24,7 @@ class AlbumPageLoading extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
+              vertical: 9.0,
               horizontal: 20.0,
             ),
             child: Row(
