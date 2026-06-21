@@ -20,15 +20,14 @@ class SongAdapter extends TypeAdapter<Song> {
       id: fields[0] as int,
       title: fields[1] as String,
       artists: (fields[2] as List).cast<String>(),
-      lyric: fields[3] as String,
-      totalView: fields[4] as int,
+      cover: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Song obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -36,9 +35,7 @@ class SongAdapter extends TypeAdapter<Song> {
       ..writeByte(2)
       ..write(obj.artists)
       ..writeByte(3)
-      ..write(obj.lyric)
-      ..writeByte(4)
-      ..write(obj.totalView);
+      ..write(obj.cover);
   }
 
   @override

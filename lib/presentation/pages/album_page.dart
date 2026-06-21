@@ -73,7 +73,7 @@ class _AlbumPageState extends State<AlbumPage> {
 
           if (state is AlbumLoaded) {
             if (state.albums.isEmpty) {
-              return const Center(child: Text("No artists found."));
+              return const Center(child: Text("No albums found."));
             }
             return RefreshIndicator(
               onRefresh: () => context.read<AlbumCubit>().load(),

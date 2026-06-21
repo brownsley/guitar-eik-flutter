@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guitar_eik/constants/app_constants.dart';
 
 class ArtistCard extends StatelessWidget {
   final String artistName;
@@ -33,33 +34,40 @@ class ArtistCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                flex: 4,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (imageUrl != null)
-                      Image.network(imageUrl!, fit: BoxFit.cover)
-                    else
-                      Container(
-                        color: colorScheme.surfaceContainerHighest,
-                        child: Icon(
-                          Icons.person,
-                          size: 45,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                  ],
-                ),
+              // Forces a perfect square regardless of image dimensions
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final size = constraints.maxWidth;
+                  return SizedBox(
+                    width: size,
+                    height: size,
+                    child: (imageUrl != null && imageUrl!.isNotEmpty)
+                        ? Image.network(
+                            AppConstants.getImageUrl(
+                              AppConstants.artistFolder,
+                              imageUrl!,
+                            ),
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            color: colorScheme.surfaceContainerHighest,
+                            child: Icon(
+                              Icons.person,
+                              size: size * 0.4,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                  );
+                },
               ),
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.only(left: 12, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       artistName,
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w900,
                         color: colorScheme.onSurface,
                         letterSpacing: -0.4,
@@ -67,18 +75,18 @@ class ArtistCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
                         Container(
                           width: 3,
-                          height: 12,
+                          height: 14,
                           decoration: BoxDecoration(
                             color: colorScheme.primary,
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 6),
                         Text(
                           "$totalSongs Tracks",
                           style: theme.textTheme.bodySmall?.copyWith(

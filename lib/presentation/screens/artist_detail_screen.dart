@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guitar_eik/constants/app_constants.dart';
 import 'package:guitar_eik/logic/artist/detail/artist_detail_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/card/album_card.dart';
 import 'package:guitar_eik/presentation/widgets/card/song_list_item.dart';
@@ -33,7 +34,7 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-
+      appBar: AppBar(),
       body: SafeArea(
         child: BlocBuilder<ArtistDetailCubit, ArtistDetailState>(
           builder: (context, state) {
@@ -59,39 +60,57 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 250,
-                      width: double.infinity,
-                      child: Image.network(artist.avatar, fit: BoxFit.cover),
-                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            width: 130,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                AppConstants.getImageUrl(
+                                  AppConstants.artistFolder,
+                                  artist.avatar,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
 
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  artist.name,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.headlineMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: colorScheme.onSurface,
+                                      ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "${artist.totalTrack} Tracks",
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 16),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        artist.name,
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 6),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        "${artist.totalTrack} Tracks",
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-
                     if (artist.albums.isNotEmpty) ...[
-                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
@@ -103,7 +122,6 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                       ),
 
                       const SizedBox(height: 10),
-
                       SizedBox(
                         height: 120,
                         child: ListView.builder(
@@ -113,7 +131,7 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                             final album = artist.albums[index];
 
                             return SizedBox(
-                              width: 380,
+                              width: 360,
                               child: AlbumCard(
                                 albumTitle: album.name,
                                 coverUrl: album.cover,
@@ -148,9 +166,10 @@ class _ArtistDetailScreenState extends State<ArtistDetailScreen> {
                         final song = artist.songs[index];
 
                         return SongListItem(
+                          id: song.id,
                           title: song.title,
+                          cover: song.cover,
                           artists: song.artists ?? [],
-                          views: song.totalView,
                           onTap: () => Navigator.pushNamed(
                             context,
                             "/song",

@@ -14,16 +14,12 @@ class Song extends HiveObject {
   final List<String> artists;
 
   @HiveField(3)
-  final String lyric;
-
-  @HiveField(4)
-  final int totalView;
+  final String cover;
 
   Song({
     required this.id,
     required this.title,
     required this.artists,
-    required this.lyric,
-    required this.totalView,
+    required this.cover,
   });
 }

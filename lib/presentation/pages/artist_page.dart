@@ -75,15 +75,15 @@ class _ArtistPageState extends State<ArtistPage> {
                 controller: _scrollController,
                 slivers: [
                   SliverPadding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(12),
                     sliver: SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: MediaQuery.of(context).size.width > 1024
                             ? 5
                             : (MediaQuery.of(context).size.width > 600 ? 4 : 2),
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 0.8,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                        childAspectRatio: 0.73,
                       ),
                       delegate: SliverChildBuilderDelegate((context, index) {
                         final artist = state.artists[index];

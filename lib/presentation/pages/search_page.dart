@@ -5,6 +5,7 @@ import 'package:guitar_eik/logic/theme/theme_cubit.dart';
 import 'package:guitar_eik/presentation/widgets/card/album_card.dart';
 import 'package:guitar_eik/presentation/widgets/card/song_list_item.dart';
 import 'package:guitar_eik/presentation/widgets/list/artists_list.dart';
+import 'package:guitar_eik/presentation/widgets/ui/section_header.dart';
 import 'package:guitar_eik/presentation/widgets/utils/empty_page.dart';
 
 class SearchPage extends StatefulWidget {
@@ -16,41 +17,72 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  late SearchBloc _searchBloc;
 
   @override
   void initState() {
     super.initState();
-    _searchBloc = context.read<SearchBloc>();
+    context.read<SearchBloc>().add(OnResetSearch());
   }
 
   @override
   void dispose() {
-    _searchBloc.add(OnResetSearch());
+    context.read<SearchBloc>().add(OnResetSearch());
     _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.watch<ThemeCubit>().state;
-
-    final Color backgroundColor = isDark
-        ? const Color(0xFF121212)
-        : Colors.white;
-    final Color containerColor = isDark
-        ? const Color(0xFF1E1E1E)
-        : const Color(0xFFF2EDED);
-    final Color textColor = isDark ? Colors.white : Colors.black87;
-    final Color subTextColor = isDark ? Colors.white70 : Colors.black54;
-    final Color hintColor = isDark ? Colors.grey[500]! : Colors.grey[600]!;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final bool isDarkMode = context.watch<ThemeCubit>().state;
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
-            _buildSearchBar(textColor, containerColor, hintColor),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(
+                    Icons.arrow_back_ios_new,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerLow,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      style: TextStyle(color: colorScheme.onSurface),
+                      decoration: InputDecoration(
+                        hintText: "Search Artist or Songs",
+                        hintStyle: TextStyle(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 12,
+                        ),
+                      ),
+                      onChanged: (value) =>
+                          context.read<SearchBloc>().add(OnQueryChanged(value)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Expanded(
               child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
@@ -63,19 +95,19 @@ class _SearchPageState extends State<SearchPage> {
                         state.albums.isEmpty) {
                       return const EmptyPage();
                     }
+
                     return ListView(
                       physics: const BouncingScrollPhysics(),
                       children: [
                         if (state.artists.isNotEmpty) ...[
-                          _buildSectionTitle("Artists", textColor),
+                          SectionHeader(title: "ARTISTS", isDark: isDarkMode),
                           SizedBox(
-                            height: 240,
+                            height: 260,
                             child: ArtistHorizontalList(artists: state.artists),
                           ),
                         ],
-
                         if (state.albums.isNotEmpty) ...[
-                          _buildSectionTitle("Albums", textColor),
+                          SectionHeader(title: "ALBUMS", isDark: isDarkMode),
                           SizedBox(
                             height: 120,
                             child: ListView.builder(
@@ -83,13 +115,11 @@ class _SearchPageState extends State<SearchPage> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                               ),
-                              itemCount: state.albums.length > 20
-                                  ? 20
-                                  : state.albums.length,
+                              itemCount: state.albums.length.clamp(0, 20),
                               itemBuilder: (context, index) {
                                 final album = state.albums[index];
                                 return SizedBox(
-                                  width: 360,
+                                  width: 320,
                                   child: AlbumCard(
                                     albumTitle: album.name,
                                     coverUrl: album.cover,
@@ -105,16 +135,16 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                         ],
-
                         if (state.songs.isNotEmpty) ...[
-                          _buildSectionTitle("Songs", textColor),
+                          SectionHeader(title: "SONGS", isDark: isDarkMode),
                           ...state.songs
                               .take(20)
                               .map(
                                 (song) => SongListItem(
+                                  id: song.id,
                                   title: song.title,
+                                  cover: song.cover,
                                   artists: song.artists ?? [],
-                                  views: song.totalView,
                                   onTap: () => Navigator.pushNamed(
                                     context,
                                     "/song",
@@ -130,68 +160,13 @@ class _SearchPageState extends State<SearchPage> {
                   return Center(
                     child: Text(
                       "Search for your favorite artist",
-                      style: TextStyle(color: subTextColor),
+                      style: TextStyle(color: colorScheme.onSurfaceVariant),
                     ),
                   );
                 },
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchBar(
-    Color textColor,
-    Color containerColor,
-    Color hintColor,
-  ) {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new, color: textColor),
-        ),
-        Expanded(
-          child: Container(
-            margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-            decoration: BoxDecoration(
-              color: containerColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextField(
-              controller: _searchController,
-              style: TextStyle(color: textColor),
-              decoration: InputDecoration(
-                hintText: "Search Artist or Songs",
-                hintStyle: TextStyle(color: hintColor),
-                prefixIcon: Icon(Icons.search, color: hintColor),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 12,
-                ),
-              ),
-              onChanged: (value) {
-                _searchBloc.add(OnQueryChanged(value));
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSectionTitle(String title, Color textColor) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: textColor,
         ),
       ),
     );

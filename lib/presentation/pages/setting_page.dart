@@ -81,6 +81,13 @@ class SettingPage extends StatelessWidget {
                     );
                   },
                 ),
+                SettingItem(
+                  title: "Chord Libary",
+                  icon: Icons.table_chart,
+                  onTap: () {
+                    Navigator.pushNamed(context, "/libary");
+                  },
+                ),
               ],
             ),
 

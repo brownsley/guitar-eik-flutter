@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guitar_eik/core/theme/app_theme.dart';
 import 'package:guitar_eik/logic/theme/theme_cubit.dart';
+import 'package:guitar_eik/presentation/pages/chord_diragram.dart';
 import 'package:guitar_eik/presentation/pages/home/app_home_page.dart';
 import 'package:guitar_eik/presentation/pages/search_page.dart';
 import 'package:guitar_eik/presentation/pages/splash/slash_screen.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
             "/artist": (context) => const ArtistDetailScreen(),
             "/album": (context) => const AlbumDetailScreen(),
             "/search": (context) => const SearchPage(),
+            "/libary": (context) => const ChordDiragram(),
           },
         );
       },

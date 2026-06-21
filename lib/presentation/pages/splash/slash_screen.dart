@@ -36,6 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
 
     return Scaffold(
       backgroundColor: isDarkMode ? const Color(0xFF121212) : Colors.white,
@@ -43,39 +44,30 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Center(
             child: Text(
-              "GuitarEik",
+              "GUITAR EIK",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                letterSpacing: 1.5,
-                color: isDarkMode ? Colors.white : Colors.black87,
+                letterSpacing: 2.0,
+                color: textColor,
               ),
             ),
           ),
 
           Positioned(
-            bottom: 50,
+            bottom: 40,
             left: 0,
             right: 0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Developed by",
+                  "MUSIC IN YOUR POCKET",
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey.shade400,
-                    letterSpacing: 1,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "Brownsley Heim",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blueAccent.withOpacity(0.8),
-                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey.shade600,
+                    letterSpacing: 2.5,
                   ),
                 ),
               ],

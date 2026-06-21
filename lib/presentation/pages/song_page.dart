@@ -81,8 +81,9 @@ class _SongPageState extends State<SongPage> {
                       final song = state.songs[index];
 
                       return SongListItem(
-                        views: song.totalView,
+                        id: song.id,
                         title: song.title,
+                        cover: song.cover,
                         artists: song.artists ?? [],
                         onTap: () {
                           Navigator.pushNamed(

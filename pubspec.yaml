@@ -21,13 +21,13 @@ dependencies:
   flutter_bloc: ^9.1.1
   shared_preferences: ^2.5.5
   flutter_chord: ^0.1.2
-  flutter_guitar_tabs: ^0.0.10
   google_fonts: ^8.0.2
   lottie: ^3.3.3
   dio: ^5.9.2
   flutter_skeleton_ui: ^0.0.6
   flutter_native_splash: ^2.4.7
   connectivity_plus: ^7.1.1
+  chord_diagrams: ^0.7.0
 
 flutter_native_splash:
   color: "#A3A3A3"

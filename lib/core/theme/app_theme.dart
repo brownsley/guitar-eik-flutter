@@ -3,21 +3,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guitar_eik/core/theme/extension.dart';
 
 class AppTheme {
-  static const Color slateBgLight = Color(0xFFF8FAFC);
-  static const Color slateBgDark = Color(0xFF0F172A);
-  static const Color slateSurfaceDark = Color(0xFF1E293B);
-  static const Color slateAccent = Color(0xFF38BDF8);
-  static const Color charcoalText = Color(0xFF334155);
+  static const Color bgLight = Color(0xFFF8FAFC);
+  static const Color bgDark = Color(0xFF0F172A);
+  static const Color surfaceDark = Color(0xFF1E293B);
+  static const Color textDark = Color(0xFF334155);
 
   static final lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: slateBgLight,
+    scaffoldBackgroundColor: bgLight,
     splashFactory: NoSplash.splashFactory,
     highlightColor: Colors.transparent,
 
     textTheme: GoogleFonts.padaukTextTheme().copyWith(
-      bodyMedium: const TextStyle(height: 1.6, color: charcoalText),
+      bodyMedium: const TextStyle(height: 1.6, color: textDark),
       bodyLarge: const TextStyle(
         height: 1.6,
         fontSize: 16,
@@ -31,18 +30,18 @@ class AppTheme {
     ),
 
     colorScheme: ColorScheme.fromSeed(
-      seedColor: slateAccent,
+      seedColor: Colors.black,
       brightness: Brightness.light,
       primary: const Color(0xFF0F172A),
       onPrimary: Colors.white,
-      surface: slateBgLight,
+      surface: bgLight,
       surfaceContainerLow: Colors.white,
       outlineVariant: const Color(0xFFE2E8F0),
       onSurfaceVariant: const Color(0xFF64748B),
     ),
 
     appBarTheme: const AppBarTheme(
-      backgroundColor: slateBgLight,
+      backgroundColor: bgLight,
       elevation: 0,
       centerTitle: false,
       iconTheme: IconThemeData(color: Color(0xFF0F172A)),
@@ -71,7 +70,7 @@ class AppTheme {
   static final darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: slateBgDark,
+    scaffoldBackgroundColor: bgDark,
     splashFactory: NoSplash.splashFactory,
     highlightColor: Colors.transparent,
 
@@ -94,19 +93,19 @@ class AppTheme {
     ),
 
     colorScheme: ColorScheme.fromSeed(
-      seedColor: slateAccent,
+      seedColor: Colors.white,
       brightness: Brightness.dark,
-      primary: slateAccent,
-      onPrimary: slateBgDark,
-      surface: slateBgDark,
-      surfaceContainerLow: slateSurfaceDark,
+      primary: Colors.white,
+      onPrimary: bgDark,
+      surface: bgDark,
+      surfaceContainerLow: surfaceDark,
       outlineVariant: Colors.white.withOpacity(0.05),
       onSurface: Colors.white,
       onSurfaceVariant: const Color(0xFF64748B),
     ),
 
     appBarTheme: const AppBarTheme(
-      backgroundColor: slateBgDark,
+      backgroundColor: bgDark,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(
@@ -117,7 +116,7 @@ class AppTheme {
     ),
 
     cardTheme: CardThemeData(
-      color: slateSurfaceDark,
+      color: surfaceDark,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -128,7 +127,7 @@ class AppTheme {
     extensions: [
       AppColorsExtension(
         lyricColor: Colors.white,
-        lyricBackground: slateSurfaceDark,
+        lyricBackground: surfaceDark,
       ),
     ],
   );
