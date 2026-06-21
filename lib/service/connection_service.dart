@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ConnectionService {
   static Future<bool> isConnected() async {
@@ -9,6 +10,9 @@ class ConnectionService {
 
     if (results.contains(ConnectivityResult.none)) {
       return false;
+    }
+    if (kIsWeb) {
+      return true;
     }
     try {
       final result = await InternetAddress.lookup(

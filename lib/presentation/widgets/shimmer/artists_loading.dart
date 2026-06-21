@@ -21,7 +21,7 @@ class ArtistsListLoading extends StatelessWidget {
         itemCount: itemCount,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 3),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -29,7 +29,7 @@ class ArtistsListLoading extends StatelessWidget {
 
                 const Expanded(child: _ArtistSkeletonItem()),
 
-                const SizedBox(width: 10),
+                const SizedBox(width: 14),
 
                 const Expanded(child: _ArtistSkeletonItem()),
 
@@ -59,17 +59,17 @@ class _ArtistSkeletonItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 14),
 
         Container(
           width: double.infinity,
-          height: 14,
+          height: 12,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
 
         Container(
           width: 80,

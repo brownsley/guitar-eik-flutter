@@ -48,6 +48,14 @@ class _HomePageState extends State<HomePage> {
             fontSize: 16,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/search");
+            },
+            icon: Icon(Icons.search, size: 28),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -57,7 +65,7 @@ class _HomePageState extends State<HomePage> {
             const HomeHeroAds(),
             SectionHeader(title: "ARTISTS", isDark: isDark),
             SizedBox(
-              height: 250,
+              height: 260,
               child: BlocBuilder<ArtistCubit, ArtistState>(
                 builder: (context, state) {
                   if (state is ArtistLoading) {

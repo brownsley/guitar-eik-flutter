@@ -24,7 +24,7 @@ class SongsPageLoading extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 4.0,
-              horizontal: 16.0,
+              horizontal: 12.0,
             ),
             child: Container(
               decoration: BoxDecoration(
@@ -35,20 +35,20 @@ class SongsPageLoading extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
+                vertical: 4.0,
                 horizontal: 12.0,
               ),
               child: Row(
                 children: [
                   Container(
-                    width: 60,
-                    height: 60,
+                    width: 80,
+                    height: 80,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 18),
 
                   Expanded(
                     child: Column(
@@ -73,31 +73,6 @@ class SongsPageLoading extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-
-                  const SizedBox(width: 16),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 14,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Container(
-                        width: 30,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),

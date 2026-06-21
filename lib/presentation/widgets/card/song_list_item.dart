@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guitar_eik/constants/app_constants.dart';
+import 'package:guitar_eik/logic/favorite/favorite_cubit.dart';
+import 'package:guitar_eik/model/song.dart';
 
 class SongListItem extends StatelessWidget {
+  final int id;
   final String title;
+  final String cover;
   final List<String> artists;
-  final int views;
   final VoidCallback? onTap;
 
   const SongListItem({
     super.key,
+    required this.id,
     required this.title,
+    required this.cover,
     required this.artists,
-    required this.views,
     this.onTap,
   });
 
@@ -19,96 +25,117 @@ class SongListItem extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    String formattedViews = views >= 1000000
-        ? '${(views / 1000000).toStringAsFixed(1)}M'
-        : views >= 1000
-        ? '${(views / 1000).toStringAsFixed(1)}K'
-        : views.toString();
-
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: colorScheme.outlineVariant),
-        ),
+      padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 16.0),
+      child: Material(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Icon(
-                    Icons.music_note_rounded,
-                    color: colorScheme.primary,
-                    size: 30,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: colorScheme.onSurface,
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 80,
+              child: Row(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(7),
+                      child: Image.network(
+                        AppConstants.getImageUrl(
+                          AppConstants.songFolder,
+                          cover,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        artists.isNotEmpty ? artists.join(", ") : "Unknown",
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontSize: 13,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      formattedViews,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: colorScheme.onSurface,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: colorScheme.surfaceVariant,
+                            child: const Icon(
+                              Icons.music_note,
+                              color: Colors.grey,
+                              size: 40,
+                            ),
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      "VIEWS",
-                      style: TextStyle(
-                        fontSize: 9,
-                        letterSpacing: 0.5,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            title,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.onSurface,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          artists.isNotEmpty ? artists.join(", ") : "Unknown",
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  BlocBuilder<FavoriteCubit, FavoriteState>(
+                    builder: (context, state) {
+                      final isFavorite = context
+                          .read<FavoriteCubit>()
+                          .isFavorite(id);
+                      return IconButton(
+                        onPressed: () {
+                          final songToSave = Song(
+                            id: id,
+                            title: title,
+                            cover: cover,
+                            artists: artists,
+                          );
+                          context.read<FavoriteCubit>().toggleFavorite(
+                            songToSave,
+                          );
+                        },
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_outline,
+                          size: 30,
+                          color: isFavorite
+                              ? colorScheme.error
+                              : colorScheme.outline,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

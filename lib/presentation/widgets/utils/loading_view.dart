@@ -1,38 +1,34 @@
 import 'package:flutter/material.dart';
 
 class LoadingView extends StatelessWidget {
-  final String? message;
+  final String message;
 
-  const LoadingView({super.key, this.message});
+  const LoadingView({super.key, this.message = "Loading..."});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: 45,
-            height: 45,
-            child: CircularProgressIndicator(
-              strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
-              backgroundColor: colorScheme.primary.withOpacity(0.1),
+          const SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator.adaptive(strokeWidth: 4.5),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            message,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.5,
             ),
           ),
-          if (message != null) ...[
-            const SizedBox(height: 16),
-            Text(
-              message!,
-              style: TextStyle(
-                fontSize: 14,
-                color: colorScheme.onSurfaceVariant,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
+          const SizedBox(height: 80),
         ],
       ),
     );

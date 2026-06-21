@@ -25,7 +25,7 @@ class _SongPagerState extends State<SongPager> {
     final pageCount = (limitedSongs.length / 2).ceil();
 
     return SizedBox(
-      height: 175,
+      height: 200,
       child: PageView.builder(
         controller: _pageController,
         itemCount: pageCount,
@@ -37,9 +37,10 @@ class _SongPagerState extends State<SongPager> {
             mainAxisSize: MainAxisSize.min,
             children: [
               SongListItem(
+                id: limitedSongs[firstIndex].id,
                 title: limitedSongs[firstIndex].title,
+                cover: limitedSongs[firstIndex].cover,
                 artists: limitedSongs[firstIndex].artists ?? [],
-                views: limitedSongs[firstIndex].totalView,
                 onTap: () => Navigator.pushNamed(
                   context,
                   "/song",
@@ -49,9 +50,10 @@ class _SongPagerState extends State<SongPager> {
 
               if (secondIndex < limitedSongs.length)
                 SongListItem(
+                  id: limitedSongs[secondIndex].id,
                   title: limitedSongs[secondIndex].title,
+                  cover: limitedSongs[secondIndex].cover,
                   artists: limitedSongs[firstIndex].artists ?? [],
-                  views: limitedSongs[secondIndex].totalView,
                   onTap: () => Navigator.pushNamed(
                     context,
                     "/song",

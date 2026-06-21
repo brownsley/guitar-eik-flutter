@@ -37,11 +37,10 @@ class ChordScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                   final songToSave = Song(
                     id: songData.id,
                     title: songData.title,
-                    totalView: songData.totalView,
+                    cover: songData.cover,
                     artists: (songData.artists as List)
                         .map((e) => e.toString())
                         .toList(),
-                    lyric: songData.lyric ?? '',
                   );
                   context.read<FavoriteCubit>().toggleFavorite(songToSave);
                 },
